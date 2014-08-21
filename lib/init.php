@@ -65,13 +65,13 @@ add_action('widgets_init', 'roots_widgets_init');
 add_action( 'init', 'create_posttype' );
 
 function create_posttype() {
-  register_post_type( 'attorney',
+  register_post_type( 'custompost',
     array(
       'labels' => array(
-        'name' => __( 'Attorneys' ),
-        'singular_name' => __( 'Attorney' )
+        'name' => __( 'Custom Posts' ),
+        'singular_name' => __( 'Custom Posts' )
       ),
-      'rewrite' => array('slug' => 'archive-attorney'),
+      'rewrite' => array('slug' => 'archive-custompost'),
       'public' => true,
       'hierarchical' => true,
       'has_archive' => true,
@@ -86,44 +86,4 @@ function create_posttype() {
     )
   );
 
-  register_post_type( 'practicearea',
-    array(
-      'labels' => array(
-        'name' => __( 'Practice Areas' ),
-        'singular_name' => __( 'Practice Area' )
-      ),
-      'rewrite' => array('slug' => 'archive-practice-area'),
-      'public' => true,
-      'hierarchical' => true,
-      'has_archive' => true,
-      'menu_position' => 5,
-      'supports' => array(
-          'title',
-          'editor',
-          'excerpt',
-          'thumbnail'
-      ),
-      'can_export' => true
-    )
-  );
-
-  register_post_type( 'faq',
-    array(
-      'labels' => array(
-        'name' => __( 'Family Law FAQ' ),
-        'singular_name' => __( 'Family Law FAQ' )
-      ),
-      'rewrite' => array('slug' => 'archive-faq'),
-      'public' => true,
-      'hierarchical' => true,
-      'has_archive' => true,
-      'menu_position' => 5,
-      'supports' => array(
-          'title',
-          'editor',
-          'excerpt'
-      ),
-      'can_export' => true,
-    )
-  );
 }
