@@ -1,8 +1,5 @@
 <header class="banner navbar navbar-default navbar-static-top" role="banner">
   <div class="container">
-    <a href="<?php echo esc_url(home_url('/')); ?>">
-      <img src="<?php echo get_template_directory_uri(); ?>/assets/img/logo.png" alt="<?php bloginfo('name'); ?>" class="logo img-responsive">
-    </a>
 
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -11,6 +8,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+
+      <a class="navbar-brand" href="#">Nielsen Design</a>
     </div>
 
     <nav class="collapse navbar-collapse" role="navigation">
@@ -22,7 +21,3 @@
     </nav>
   </div>
 </header>
-
-<section class="jumbotron">
-  <img src="<?php echo get_template_directory_uri(); ?>/assets/img/header.jpg" alt="<?php bloginfo('name'); ?>" class="img img-responsive">
-</section>
