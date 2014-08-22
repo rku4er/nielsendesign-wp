@@ -18,6 +18,12 @@ module.exports = function(grunt) {
     'assets/vendor/bootstrap/js/scrollspy.js',
     'assets/vendor/bootstrap/js/tab.js',
     'assets/vendor/bootstrap/js/affix.js',
+    'assets/vendor/jquery.easing/jquery.easing.1.3.js',
+    'assets/vendor/jquery-mousewheel/jquery.mousewheel.js',
+    'assets/vendor/Columnizer-jQuery-Plugin/src/jquery.columnizer.js',
+    'assets/vendor/jquery-waypoints/waypoints.js',
+    'assets/vendor/jquery.slimscroll/jquery.slimscroll.js',
+    'assets/vendor/fullpage.js/jquery.fullPage.js',
     'assets/js/plugins/*.js',
     'assets/js/_*.js'
   ];

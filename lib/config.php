@@ -53,8 +53,8 @@ function roots_display_sidebar() {
      * The second element must be an array even if there's only 1 argument.
      */
     array(
+      'is_front_page',
       'is_404',
-      //'is_front_page',
       //array('is_page', array(42, 'page-slug', 'Page Title'))
     ),
     /**

@@ -29,7 +29,8 @@ var Roots = {
   home: {
     init: function() {
       // JavaScript to be fired on the home page
-      $('#columns').columnize({ columns: 2, buildOnce: false });
+      //$('#columns').columnize({ columns: 2, buildOnce: false });
+
     }
   },
   // About us page, note the change from about-us to about_us.
