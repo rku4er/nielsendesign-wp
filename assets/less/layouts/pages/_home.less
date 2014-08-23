@@ -1,4 +1,4 @@
-#columns{
+/* #columns{
 
     @media (max-width: @screen-xs-max){
         .column{
@@ -18,6 +18,54 @@
     @media (min-width: @screen-lg-min){
         .column{
             text-align: justify;
+        }
+    }
+} */
+
+#fullpage{
+    .section{
+        background-image: url("../img/bg/noise.png");
+    }
+}
+
+#section-home{
+    .brand-name{
+        font-family: "Century Gothic", Arial, sans-serif;
+        color: @brand-primary;
+        font-size: 34px;
+        margin: 0;
+        padding-top: 50px;
+    }
+    .brand-description{
+        font-family: "Century Gothic", Arial, sans-serif;
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+    .navbar-contacts{
+
+        color: @brand-primary;
+
+        .navbar-nav{
+            float: none;
+            text-align: right;
+
+            >li{
+                float: none;
+                display: inline-block;
+                vertical-align: top;
+
+                .icon{
+                    margin-right: 5px;
+                }
+            }
+        }
+
+        .navbar-text{
+            color: @brand-primary;
+
+            .icon{
+                font-size: 1.3em;
+            }
         }
     }
 }

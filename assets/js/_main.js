@@ -30,7 +30,52 @@ var Roots = {
     init: function() {
       // JavaScript to be fired on the home page
       //$('#columns').columnize({ columns: 2, buildOnce: false });
+      var templatePath = $('body').data('template-path');
+      var hashArr = ['home'];
+      var bgArr = [templatePath + '/assets/img/bg/home.jpg'];
 
+      $('#menu-main-menu a').each(function(){
+        var re = /\w*-?\w*(?=\/$)/gi;
+        var hash = $(this).attr('href').match(re)[0];
+
+        hashArr.push(hash);
+        bgArr.push(templatePath + '/assets/img/bg/' + hash + '.jpg');
+        $(this).attr('href', '#' + hash);
+      });
+
+      $('#fullpage .section').each(function(i){
+        $(this).css({
+          'background-image' : 'url(' + bgArr[i] + ')'
+        });
+      });
+
+      $('#fullpage').fullpage({
+        css3: true,
+        resize : false,
+        scrollOverflow: false,
+        autoScrolling: true,
+        verticalCentered: false, //buggy here
+        scrollingSpeed: 700,
+        easing: 'easeInQuart',
+        menu: '#navbar',
+        anchors: hashArr,
+        paddingTop: '0',
+        paddingBottom: $('#navbar').outerHeight() + 'px',
+        keyboardScrolling: true,
+        touchSensitivity: 15,
+        continuousVertical: false,
+        animateAnchor: true,
+        sectionSelector: '.section',
+        slideSelector: '.slide',
+
+        //events
+        onLeave: function(index, nextIndex, direction){},
+        afterLoad: function(anchorLink, index){},
+        afterRender: function(){},
+        afterResize: function(){},
+        afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
+        onSlideLeave: function(anchorLink, index, slideIndex, direction){}
+      });
     }
   },
   // About us page, note the change from about-us to about_us.

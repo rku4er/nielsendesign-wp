@@ -1,4 +1,4 @@
-<header id="navbar" class="banner navbar navbar-default navbar-fixed-bottom" role="banner">
+<header id="navbar" class="navbar-menu navbar navbar-default navbar-fixed-bottom" role="banner">
   <div class="container">
 
     <div class="navbar-header">
@@ -8,6 +8,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+
+      <a href="<?php echo get_bloginfo('url'); ?>" class="navbar-brand">Home</a>
     </div>
 
     <nav class="collapse navbar-collapse" role="navigation">

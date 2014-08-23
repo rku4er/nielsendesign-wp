@@ -34,3 +34,55 @@ function roots_wrap_base_cpts($templates) {
     return $templates;
 }
 
+/**
+ * Home slider shortcode
+ */
+function home_slider_func($atts, $content = null) {
+    $atts = shortcode_atts(array(
+      'timeout' => '5000'
+    ), $atts);
+
+    $output = '';
+
+    if(have_rows('slider')){
+
+      $output .= '<section id="home-slider" class="carousel carousel-slide carousel-fade" data-ride="carousel" data-interval="'. $atts['timeout'] .'">';
+
+      $output .= '<div class="carousel-inner">';
+
+      $i = 0;
+
+      while(have_rows('slider')){
+
+          the_row();
+          $i++;
+          $active = ($i == 1) ? 'active' : '';
+
+          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'full', false);
+
+          $output .= '<div class="item '. $active .'">';
+
+          $target = get_sub_field('new_window') ? 'target="_blank"' : '';
+
+          if(get_sub_field('url')){
+            $output .= '<a href="'. get_sub_field('url') .'" '. $target .'>';
+          }
+
+          $output .= '<img src="'. $img_src[0].'" alt="">';
+
+          if(get_sub_field('url')){
+            $output .= '</a>';
+          }
+
+          $output .= '</div>';
+      }
+
+      $output .= '</div>';
+    }
+
+    $output .= '</section>';
+
+    return $output;
+}
+
+add_shortcode('home_slider', 'home_slider_func');
