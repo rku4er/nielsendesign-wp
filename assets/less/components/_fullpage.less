@@ -24,15 +24,14 @@
     height: 100%;
     overflow: hidden;
     position: relative;
-    -webkit-transition: all 0.3s ease-out;
-    -moz-transition: all 0.3s ease-out;
-    -o-transition: all 0.3s ease-out;
-    transition: all 0.3s ease-out;
+
+    .transition(all 0.3s ease-out);
 }
 #fullpage .section.table,
 #fullpage .slide.table {
     display: table;
     width: 100%;
+    table-layout: fixed;
 }
 .tableCell {
     display: table-cell;
@@ -68,10 +67,7 @@
     overflow: scroll;
 }
 .easing {
-    -webkit-transition: all 0.7s ease-out;
-    -moz-transition: all 0.7s ease-out;
-    -o-transition: all 0.7s ease-out;
-    transition: all 0.7s ease-out;
+    .transition(all 0.7s ease-out);
 }
 #fullPage-nav {
     position: fixed;

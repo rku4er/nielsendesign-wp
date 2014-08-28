@@ -16,11 +16,10 @@ Template Name: Home
 <div id="fullpage">
 
     <div class="section" id="section-home">
-
-        <?php if(have_rows('contacts')): ?>
+        <?php if(have_rows('contacts', 'options')): ?>
         <nav class="navbar-contacts navbar navbar-default">
             <ul class="nav navbar-nav">
-            <?php while(have_rows('contacts')): the_row(); ?>
+            <?php while(have_rows('contacts', 'options')): the_row(); ?>
                 <li>
                     <?php if(get_sub_field('url')): ?>
                         <a href="<?php echo get_sub_field('url'); ?>" <?php if(get_sub_field('new_widnow')) echo 'target="_blank"'; ?>>

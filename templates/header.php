@@ -9,7 +9,7 @@
         <span class="icon-bar"></span>
       </button>
 
-      <a href="<?php echo get_bloginfo('url'); ?>" class="navbar-brand">Home</a>
+      <a href="<?php echo get_bloginfo('url'); ?>" class="navbar-brand"><span class="glyphicon glyphicon-home"></span>Home</a>
     </div>
 
     <nav class="collapse navbar-collapse" role="navigation">

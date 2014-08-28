@@ -16,6 +16,115 @@
 
 (function($) {
 
+function initCrewPersons(){
+  var crewTiles = $('#crew-tiles .item');
+  var persons = $('#crew-tiles .persons');
+
+  if(crewTiles.length){
+    crewTiles.each(function(i){
+      i++;
+      $(this).hover(function(){
+        persons.toggleClass('active-'+i);
+      });
+
+      if(i === crewTiles.length){
+        $('body').data('crew_persons_loaded', true);
+      }
+    });
+  }
+}
+
+function initCreationBottles(){
+  var creationBottles = $('#creation-bottles .item');
+
+  if(creationBottles.length){
+    creationBottles.each(function(i){
+      i++;
+      var range = $(this).find('.range');
+
+      setTimeout(function(){
+        range.css('height' , '0').animate({
+          'height' : range.data('perc')
+        }, 1000, 'easeInOutQuart');
+      }, i*200);
+
+      if(i === creationBottles.length){
+        $('body').data('creation_bottles_loaded', true);
+      }
+
+    });
+  }
+}
+
+function initializeMaps(myLatlng, image) {
+  var mapOptions = {
+    center: myLatlng,
+    zoom: 15,
+    mapTypeControlOptions: {
+      mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'tehgrayz']
+    }
+  };
+
+  var stylez = [
+    {
+      featureType: "all",
+      elementType: "all",
+      stylers: [
+        { saturation: -100 }
+      ]
+    }
+  ];
+
+  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+  var mapType = new google.maps.StyledMapType(stylez, { name:"Grayscale" });
+
+  map.mapTypes.set('tehgrayz', mapType);
+  map.setMapTypeId('tehgrayz');
+
+  // To add the marker to the map, use the 'map' property
+  var marker = new google.maps.Marker({
+    position: myLatlng,
+    title:"Nielsen Design",
+    animation: google.maps.Animation.DROP,
+    icon: image
+  });
+
+  google.maps.event.addListener(marker, 'click', function(){
+    toggleBounce(marker);
+  });
+
+  marker.setMap(map);
+}
+
+function toggleBounce(marker) {
+  if (marker.getAnimation() != null) {
+    marker.setAnimation(null);
+  } else {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+}
+
+function showGmaps(){
+  // Google Maps
+  if(typeof google !== "undefined"){
+
+    var myLatlng = new google.maps.LatLng($('body').data('latitude'), $('body').data('longitude'));
+    var image = $('body').data('marker');
+
+    $('body').removeAttr('data-latitude');
+    $('body').removeAttr('data-longitude');
+    $('body').removeAttr('data-marker');
+
+    /* google.maps.event.addDomListener(window, 'load', initialize); */
+
+    $('#map img').on('click', function(){
+      initializeMaps(myLatlng, image);
+    });
+
+  }
+}
+
 // Use this variable to set up the common and page specific functions. If you
 // rename this variable, you will also need to rename the namespace below.
 var Roots = {
@@ -23,6 +132,18 @@ var Roots = {
   common: {
     init: function() {
       // JavaScript to be fired on all pages
+      initCrewPersons();
+
+      if(!$('body.home').length){
+        initCreationBottles();
+      }
+
+      var required_fields = $('.gfield_required');
+      if(required_fields.length){
+        required_fields.text('(Required)');
+      }
+
+      showGmaps();
     }
   },
   // Home page
@@ -32,34 +153,34 @@ var Roots = {
       //$('#columns').columnize({ columns: 2, buildOnce: false });
       var templatePath = $('body').data('template-path');
       var hashArr = ['home'];
-      var bgArr = [templatePath + '/assets/img/bg/home.jpg'];
+      //var bgArr = [templatePath + '/assets/img/bg/home.jpg'];
 
       $('#menu-main-menu a').each(function(){
         var re = /\w*-?\w*(?=\/$)/gi;
         var hash = $(this).attr('href').match(re)[0];
 
         hashArr.push(hash);
-        bgArr.push(templatePath + '/assets/img/bg/' + hash + '.jpg');
+        //bgArr.push(templatePath + '/assets/img/bg/' + hash + '.jpg');
         $(this).attr('href', '#' + hash);
       });
 
-      $('#fullpage .section').each(function(i){
+      /*$('#fullpage .section').each(function(i){
         $(this).css({
           'background-image' : 'url(' + bgArr[i] + ')'
         });
-      });
+      });*/
 
       $('#fullpage').fullpage({
         css3: true,
         resize : false,
         scrollOverflow: false,
         autoScrolling: true,
-        verticalCentered: false, //buggy here
+        verticalCentered: true, //buggy here
         scrollingSpeed: 700,
         easing: 'easeInQuart',
         menu: '#navbar',
         anchors: hashArr,
-        paddingTop: '0',
+        paddingTop: 'auto',
         paddingBottom: $('#navbar').outerHeight() + 'px',
         keyboardScrolling: true,
         touchSensitivity: 15,
@@ -70,7 +191,11 @@ var Roots = {
 
         //events
         onLeave: function(index, nextIndex, direction){},
-        afterLoad: function(anchorLink, index){},
+        afterLoad: function(anchorLink, index){
+          if(anchorLink === 'creation' && !$('body').data('creation_bottles_loaded')){
+            initCreationBottles();
+          }
+        },
         afterRender: function(){},
         afterResize: function(){},
         afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},

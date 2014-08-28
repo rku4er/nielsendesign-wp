@@ -1,4 +1,5 @@
-.navbar-default.navbar-menu .navbar-nav >li .icon{ margin-right: 5px; }
+.navbar-default.navbar-menu .navbar-nav >li .icon,
+.navbar-default.navbar-menu .navbar-brand .glyphicon{ margin-right: 5px; }
 
 body.home .navbar-default{
 
@@ -52,14 +53,12 @@ body.home .navbar-default{
 
             > a{
                 color: @brand-primary;
-                font-family: "Century Gothic", Arial, sans-serif;
                 text-align: center;
+                outline: none;
 
-                transition: color .2s ease;
+                .transition(color .2s ease);
 
-                &:hover,
-                &:focus{
-                    outline: none;
+                &:hover{
                     color: darken(@brand-primary, 10);
                 }
             }

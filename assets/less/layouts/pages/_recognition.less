@@ -1,0 +1,82 @@
+#recognition-carousel{
+    padding: 0 40px;
+    background-color: #FFF;
+    margin-bottom: 50px;
+
+    .carousel-control{
+        width: 30px;
+        background: none;
+
+        .glyphicon-chevron-left,
+        .glyphicon-chevron-right,
+        .icon-prev,
+        .icon-next{
+            background-color: @brand-primary;
+            font-size: 12px;
+            line-height: 30px;
+        }
+    }
+
+    .thumbnails{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+
+        >li{
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+            padding: 5px;
+
+            img{
+                margin: 0 auto;
+            }
+        }
+    }
+}
+
+#recognition-testimonials{
+    background-color: @brand-primary;
+    padding: 0 100px;
+    position: relative;
+
+    .icon{
+        position: absolute;
+        top: 50%;
+        color: #fff;
+        width: 100px;
+        text-align: center;
+        font-size: 40px;
+        margin-top: -20px;
+
+        &.icon-quote-left{
+            left: 0;
+        }
+        &.icon-quote-right{
+            right: 0;
+        }
+    }
+
+    blockquote{
+        border: 0 none;
+        text-align: center;
+        margin: 0;
+        padding: 40px 0;
+
+        cite{
+            font-style: normal;
+            font-size: 24px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        p{
+            color: #fff;
+            font-size: 16px;
+        }
+    }
+}

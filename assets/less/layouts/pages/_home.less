@@ -1,47 +1,42 @@
-/* #columns{
-
-    @media (max-width: @screen-xs-max){
-        .column{
-            float: none !important;
-            width: auto !important;
-        }
-    }
-
-    @media (min-width: @screen-xs-min){
-        margin: 0 -10px;
-
-        .column{
-            padding: 0 10px;
-        }
-    }
-
-    @media (min-width: @screen-lg-min){
-        .column{
-            text-align: justify;
-        }
-    }
-} */
-
 #fullpage{
     .section{
         background-image: url("../img/bg/noise.png");
     }
+    .wp-caption{
+        background-color: transparent;
+        border: 0 none;
+        padding: 0;
+
+        img{
+            margin-bottom: 50px;
+        }
+
+        .wp-caption-text{
+            padding: 0;
+            font-size: 14px;
+            color: @gray-light;
+            max-width: 300px;
+        }
+    }
 }
 
 #section-home{
+    padding-top: 53px;
+
     .brand-name{
-        font-family: "Century Gothic", Arial, sans-serif;
         color: @brand-primary;
         font-size: 34px;
         margin: 0;
-        padding-top: 50px;
     }
     .brand-description{
-        font-family: "Century Gothic", Arial, sans-serif;
         font-size: 20px;
         margin-bottom: 30px;
     }
     .navbar-contacts{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
 
         color: @brand-primary;
 
