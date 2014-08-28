@@ -467,7 +467,7 @@ function show_map_func($atts, $content = null) {
 
     if(get_field('latitude', 'options') && get_field('longitude', 'options')){
 
-      $output .= '<section id="map_holder">';
+      $output .= '<section id="map_holder" data-marker="'. get_field('marker_icon', 'options') .'" data-latitude="'. get_field('latitude', 'options') .'" data-longitude="'. get_field('longitude', 'options') .'" data-zoom="'. get_field('zoom', 'options') .'">';
 
       $output .= '<div class="wrapper" id="map">';
 

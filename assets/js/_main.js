@@ -16,9 +16,9 @@
 
 (function($) {
 
-function initCrewPersons(){
-  var crewTiles = $('#crew-tiles .item');
-  var persons = $('#crew-tiles .persons');
+function initCrewPersons(holder){
+  var crewTiles = $(holder).find('.item');
+  var persons = $(holder).find('.persons');
 
   if(crewTiles.length){
     crewTiles.each(function(i){
@@ -34,8 +34,8 @@ function initCrewPersons(){
   }
 }
 
-function initCreationBottles(){
-  var creationBottles = $('#creation-bottles .item');
+function initCreationBottles(holder){
+  var creationBottles = $(holder).find('.item');
 
   if(creationBottles.length){
     creationBottles.each(function(i){
@@ -56,10 +56,10 @@ function initCreationBottles(){
   }
 }
 
-function initializeMaps(myLatlng, image) {
+function initializeMaps(myLatlng, image, zoom) {
   var mapOptions = {
     center: myLatlng,
-    zoom: 15,
+    zoom: zoom,
     mapTypeControlOptions: {
       mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'tehgrayz']
     }
@@ -105,23 +105,33 @@ function toggleBounce(marker) {
   }
 }
 
-function showGmaps(){
+function showGmaps(map_holder){
   // Google Maps
   if(typeof google !== "undefined"){
 
-    var myLatlng = new google.maps.LatLng($('body').data('latitude'), $('body').data('longitude'));
-    var image = $('body').data('marker');
+    var mapHolder = $(map_holder);
+    var myLatlng = new google.maps.LatLng(mapHolder.data('latitude'), mapHolder.data('longitude'));
+    var image = mapHolder.data('marker');
+    var zoom = mapHolder.data('zoom');
 
-    $('body').removeAttr('data-latitude');
-    $('body').removeAttr('data-longitude');
-    $('body').removeAttr('data-marker');
+    mapHolder.removeAttr('data-latitude');
+    mapHolder.removeAttr('data-longitude');
+    mapHolder.removeAttr('data-marker');
+    mapHolder.removeAttr('data-zoom');
 
     /* google.maps.event.addDomListener(window, 'load', initialize); */
 
     $('#map img').on('click', function(){
-      initializeMaps(myLatlng, image);
+      initializeMaps(myLatlng, image, zoom);
     });
 
+  }
+}
+
+function requiredFieldsText(text){
+  var required_fields = $('.gfield_required');
+  if(required_fields.length){
+    required_fields.text(text);
   }
 }
 
@@ -132,18 +142,15 @@ var Roots = {
   common: {
     init: function() {
       // JavaScript to be fired on all pages
-      initCrewPersons();
+      initCrewPersons('#crew-tiles');
 
       if(!$('body.home').length){
-        initCreationBottles();
+        initCreationBottles('#creation-bottles');
       }
 
-      var required_fields = $('.gfield_required');
-      if(required_fields.length){
-        required_fields.text('(Required)');
-      }
+      requiredFieldsText('(Required)');
 
-      showGmaps();
+      showGmaps('#map_holder');
     }
   },
   // Home page
@@ -173,7 +180,7 @@ var Roots = {
       $('#fullpage').fullpage({
         css3: true,
         resize : false,
-        scrollOverflow: false,
+        scrollOverflow: true,
         autoScrolling: true,
         verticalCentered: true, //buggy here
         scrollingSpeed: 700,
@@ -193,7 +200,7 @@ var Roots = {
         onLeave: function(index, nextIndex, direction){},
         afterLoad: function(anchorLink, index){
           if(anchorLink === 'creation' && !$('body').data('creation_bottles_loaded')){
-            initCreationBottles();
+            initCreationBottles('#creation-bottles');
           }
         },
         afterRender: function(){},
