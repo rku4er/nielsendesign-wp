@@ -16,6 +16,24 @@
 
 (function($) {
 
+var debounce = function(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate){
+        func.apply(context, args);
+      }
+    };
+    if (immediate && !timeout){
+      func.apply(context, args);
+    }
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
 function initCrewPersons(holder){
   var crewTiles = $(holder).find('.item');
   var persons = $(holder).find('.persons');
@@ -135,6 +153,114 @@ function requiredFieldsText(text){
   }
 }
 
+// Init tiles grid
+function initTiles(element) {
+
+    $(element).each(function(i){
+
+      var demoTemplateRows = [
+        [
+            " A A A A B B B B B B C C C F F F F F F F F F I I I I I I J J J J L L L L L M M M M M M",
+            " A A A A B B B B B B C C C F F F F F F F F F I I I I I I J J J J L L L L L M M M M M M",
+            " A A A A B B B B B B C C C F F F F F F F F F I I I I I I J J J J L L L L L M M M M M M",
+            " A A A A B B B B B B C C C F F F F F F F F F I I I I I I J J J J L L L L L M M M M M M",
+            " A A A A B B B B B B C C C F F F F F F F F F I I I I I I J J J J L L L L L N N N N N N",
+            " D D D D E E E E E E E E E F F F F F F F F F I I I I I I J J J J L L L L L N N N N N N",
+            " D D D D E E E E E E E E E F F F F F F F F F I I I I I I K K K K K K K K K N N N N N N",
+            " D D D D E E E E E E E E E G G G G G H H H H I I I I I I K K K K K K K K K N N N N N N",
+            " D D D D E E E E E E E E E G G G G G H H H H I I I I I I K K K K K K K K K O O O O O O",
+            " D D D D E E E E E E E E E G G G G G H H H H I I I I I I K K K K K K K K K O O O O O O",
+            " D D D D E E E E E E E E E G G G G G H H H H I I I I I I K K K K K K K K K O O O O O O",
+            " D D D D E E E E E E E E E G G G G G H H H H I I I I I I K K K K K K K K K O O O O O O"
+        ],
+        [
+            " A A A A A B B B B B B B C C C C C C C C C F F F F F I I I I I I J J J J J M M M M M M",
+            " A A A A A B B B B B B B C C C C C C C C C F F F F F I I I I I I J J J J J M M M M M M",
+            " A A A A A B B B B B B B C C C C C C C C C F F F F F I I I I I I J J J J J M M M M M M",
+            " A A A A A B B B B B B B C C C C C C C C C F F F F F I I I I I I K K K K K M M M M M M",
+            " A A A A A B B B B B B B P P P P G G G G G F F F F F I I I I I I K K K K K N N N N N N",
+            " D D D D D B B B B B B B P P P P G G G G G F F F F F I I I I I I K K K K K N N N N N N",
+            " D D D D D E E E E E E E P P P P G G G G G F F F F F I I I I I I K K K K K N N N N N N",
+            " D D D D D E E E E E E E P P P P G G G G G F F F F F H H H H H H K K K K K N N N N N N",
+            " D D D D D E E E E E E E Q Q Q Q G G G G G F F F F F H H H H H H K K K K K O O O O O O",
+            " D D D D D E E E E E E E Q Q Q Q G G G G G F F F F F H H H H H H K K K K K O O O O O O",
+            " D D D D D E E E E E E E Q Q Q Q G G G G G F F F F F H H H H H H K K K K K O O O O O O",
+            " D D D D D E E E E E E E Q Q Q Q G G G G G F F F F F H H H H H H K K K K K O O O O O O"
+        ]
+      ];
+
+      var el = $(this),
+        grid = new Tiles.Grid(el),
+        tiles = el.children('.tile');
+
+      var TILE_IDS = el.data('ids-array');
+
+      // template is selected by user, not generated so just
+      // return the number of columns in the current template
+      grid.resizeColumns = function() {
+          return this.template.numCols;
+      };
+
+      grid.cellPadding = 0;
+
+      // by default, each tile is an empty div, we'll override creation
+      // to add a tile number to each div
+      grid.createTile = function(tileId) {
+          var tile = new Tiles.Tile(tileId);
+          tile.$el.append(tiles[tileId]);
+          return tile;
+      };
+
+      function updateTemplate(index, template){
+        // get the JSON rows for the selection
+        var rows = template[index] ? template[index] : template[0];
+
+        // set the new template and resize the grid
+        grid.template = Tiles.Template.fromJSON(rows);
+        grid.isDirty = true;
+        grid.resize();
+
+        // adjust number of tiles to match selected template
+        var ids = TILE_IDS.slice(0, grid.template.rects.length);
+        grid.updateTiles(ids);
+        grid.redraw(true);
+      }
+
+      var templateID = i;
+
+      // wait until users finishes resizing the browser
+      var debouncedResize = debounce(function() {
+          updateTemplate(templateID, demoTemplateRows);
+      }, 100);
+
+      // when the window resizes, redraw the grid
+      $(window).resize(debouncedResize).trigger('resize');
+
+    });
+
+}
+
+function loadLightbox(selector){
+  var el = $(selector);
+  var data = {};
+  var output;
+
+  data.action = 'getProductInfo';
+  data.id = el.data('id');
+
+  $.post('/wp-admin/admin-ajax.php', data, function(response) {
+    showModal(response, data.id);
+  });
+}
+
+function showModal(response, id){
+  var _modal = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalLabel">Modal title</h4></div><div class="modal-body">' + response + '</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button><button type="button" class="btn btn-primary">Save changes</button></div></div></div></div>');
+
+  _modal.prop('id', 'modal-'+id);
+  _modal.modal();
+}
+
+
 // Use this variable to set up the common and page specific functions. If you
 // rename this variable, you will also need to rename the namespace below.
 var Roots = {
@@ -151,6 +277,18 @@ var Roots = {
       requiredFieldsText('(Required)');
 
       showGmaps('#map_holder');
+
+      initTiles('.tile-grid');
+
+      $('a[rel=gallery-1]').on('click', function(e){
+        e.preventDefault();
+        var url = $(this).attr('href');
+        if ($(url).length) {
+          $(url).modal('show');
+        } else {
+          loadLightbox(this);
+        }
+      });
     }
   },
   // Home page
@@ -180,14 +318,14 @@ var Roots = {
       $('#fullpage').fullpage({
         css3: true,
         resize : false,
-        scrollOverflow: true,
-        autoScrolling: true,
+        scrollOverflow: false,
+        autoScrolling: false,
         verticalCentered: true, //buggy here
-        scrollingSpeed: 700,
-        easing: 'easeInQuart',
+        scrollingSpeed: 1000,
+        easing: 'easeOutExpo',
         menu: '#navbar',
         anchors: hashArr,
-        paddingTop: 'auto',
+        paddingTop: '10px',
         paddingBottom: $('#navbar').outerHeight() + 'px',
         keyboardScrolling: true,
         touchSensitivity: 15,
@@ -202,9 +340,20 @@ var Roots = {
           if(anchorLink === 'creation' && !$('body').data('creation_bottles_loaded')){
             initCreationBottles('#creation-bottles');
           }
+          $('#section-'+anchorLink).css({
+            'padding-bottom' : $('#navbar').outerHeight()
+          });
         },
-        afterRender: function(){},
-        afterResize: function(){},
+        afterRender: function(){
+
+        },
+        afterResize: function(){
+          $('#fullpage .section').each(function(){
+            $(this).css({
+              'padding-bottom' : $('#navbar').outerHeight()
+            });
+          });
+        },
         afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
         onSlideLeave: function(anchorLink, index, slideIndex, direction){}
       });

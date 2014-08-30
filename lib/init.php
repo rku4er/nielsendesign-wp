@@ -19,7 +19,7 @@ function roots_setup() {
   // http://codex.wordpress.org/Function_Reference/set_post_thumbnail_size
   // http://codex.wordpress.org/Function_Reference/add_image_size
   add_theme_support('post-thumbnails');
-  //add_image_size( 'custom', 300, 225, true );
+  add_image_size( 'showcase-tile', 480 );
 
   // Add post formats
   // http://codex.wordpress.org/Post_Formats
@@ -65,13 +65,13 @@ add_action('widgets_init', 'roots_widgets_init');
 add_action( 'init', 'create_posttype' );
 
 function create_posttype() {
-  register_post_type( 'custompost',
+  register_post_type( 'product',
     array(
       'labels' => array(
-        'name' => __( 'Custom Posts' ),
-        'singular_name' => __( 'Custom Posts' )
+        'name' => __( 'Products' ),
+        'singular_name' => __( 'Product' )
       ),
-      'rewrite' => array('slug' => 'archive-custompost'),
+      'rewrite' => array('slug' => 'archive-product'),
       'public' => true,
       'hierarchical' => true,
       'has_archive' => true,

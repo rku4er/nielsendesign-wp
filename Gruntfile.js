@@ -24,6 +24,10 @@ module.exports = function(grunt) {
     'assets/vendor/jquery-waypoints/waypoints.js',
     'assets/vendor/jquery.slimscroll/jquery.slimscroll.js',
     'assets/vendor/fullpage.js/jquery.fullPage.js',
+    'assets/vendor/tilesjs/src/Tile.js',
+    'assets/vendor/tilesjs/src/Template.js',
+    'assets/vendor/tilesjs/src/UniformTemplates.js',
+    'assets/vendor/tilesjs/src/Grid.js',
     'assets/js/plugins/*.js',
     'assets/js/_*.js'
   ];

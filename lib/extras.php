@@ -98,7 +98,7 @@ function crew_tiles_func($atts, $content = null) {
 
     if(have_rows('tiles')){
 
-      $output .= '<section id="crew-tiles" class="tiles">';
+      $output .= '<section id="crew-tiles" class="tiles-wrapper">';
 
       $output .= '<div class="tiles-inner">';
 
@@ -168,7 +168,7 @@ function creation_tiles_func($atts, $content = null) {
 
     if(have_rows('tiles')){
 
-      $output .= '<section id="creation-tiles" class="tiles">';
+      $output .= '<section id="creation-tiles" class="tiles-wrapper">';
 
       $output .= '<div class="tiles-inner">';
 
@@ -487,3 +487,93 @@ function show_map_func($atts, $content = null) {
 }
 
 add_shortcode('map', 'show_map_func');
+
+/**
+ * Tiles gallery shortcode
+ */
+function show_tiles_gallery_func($atts, $content = null) {
+    $atts = shortcode_atts(array(
+      'timeout' => '0'
+    ), $atts);
+
+    $output = '';
+    $page = 0;
+    $posts_array;
+
+
+    if(have_rows('gallery')){
+
+      $output .= '<section id="showcase-gallery" class="carousel carousel-slide" data-ride="carousel" data-interval="'. $atts['timeout'] .'">';
+
+      $output .= '<div class="carousel-inner">';
+
+      while(have_rows('gallery')){
+        the_row();
+        $page++;
+
+        $isActive = ($page == 1) ? 'active' : '';
+
+        $output .= '<div class="item '. $isActive .'">';
+
+          $posts_array = get_sub_field('page');
+
+          $i = 0;
+          $arrayItems = array();
+
+          // Add extra nav items for buttons
+          $itemOverflow = ($page == 1) ? 2 : 1;
+
+          foreach (range(0, count($posts_array) + $itemOverflow) as $number) {
+            $arrayItems[] = $number;
+          }
+
+          $js_array = json_encode($arrayItems);
+
+          $output .= '<div id="tile-grid-'. $page .'" class="tile-grid" data-ids-array="'. $js_array .'">';
+
+          if($page == 1){
+            $output .= '<div class="tile">';
+            $output .= '<a href="'. get_bloginfo('url') .'/archive-product/" class="view-products-link"><span><span class="icon icon-gallery"></span> View all products</span></a>';
+            $output .= '</div>';
+          }
+
+          foreach($posts_array as $post){
+            setup_postdata($post);
+
+            $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
+            $imgSrc = wp_get_attachment_image_src( $post_thumbnail_id, 'showcase-tile', false );
+
+            $output .= '<div class="tile" style="background-image: url('. $imgSrc[0] .')">';
+            $output .= '<img src="'. $imgSrc[0] .'" alt="" class="img-responsive">';
+            $output .= '<h3><a data-target="myModal" data-id="'. $post->ID .'" rel="gallery-1" href="#modal-'. $post->ID .'" class="caption"><span>'. get_the_title($post->ID) .'</span></a></h3>';
+            $output .= '</div>';
+
+          }
+
+          if($page > 1){
+            $output .= '<div class="tile">';
+            $output .= '<a href="#showcase-gallery" class="back-link" role="button" data-slide="prev"><span><span class="icon icon-arrow"></span> Back</span></a>';
+            $output .= '</div>';
+          }else{
+            $output .= '<div class="tile">';
+            $output .= '<a href="#showcase-gallery" class="view-more-link" role="button" data-slide="next"><span><span class="icon icon-arrow"></span> View More</span></a>';
+            $output .= '</div>';
+          }
+
+          $output .= '</div>';
+
+        $output .= '</div>';
+      }
+
+      wp_reset_postdata();
+
+      $output .= '</div>';
+
+      $output .= '</section>';
+
+    }
+
+    return $output;
+}
+
+add_shortcode('tiles_gallery', 'show_tiles_gallery_func');

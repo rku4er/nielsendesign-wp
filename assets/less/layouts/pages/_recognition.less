@@ -41,17 +41,28 @@
 
 #recognition-testimonials{
     background-color: @brand-primary;
-    padding: 0 100px;
     position: relative;
+    padding: 0 10px;
+
+    @media (min-width: @screen-sm-min){
+        padding: 0 100px;
+    }
 
     .icon{
         position: absolute;
-        top: 50%;
         color: #fff;
-        width: 100px;
+        width: 50px;
         text-align: center;
-        font-size: 40px;
-        margin-top: -20px;
+        font-size: 20px;
+        top: 0;
+        margin-top: 50px;
+
+        @media (min-width: @screen-sm-min){
+            font-size: 40px;
+            top: 50%;
+            margin-top: -20px;
+            width: 100px;
+        }
 
         &.icon-quote-left{
             left: 0;
@@ -72,6 +83,11 @@
             font-size: 24px;
             display: block;
             margin-bottom: 10px;
+            padding: 0 50px;
+
+            @media (min-width: @screen-sm-min){
+                padding: 0;
+            }
         }
 
         p{
