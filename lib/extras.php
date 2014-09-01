@@ -467,9 +467,9 @@ function show_map_func($atts, $content = null) {
 
     if(get_field('latitude', 'options') && get_field('longitude', 'options')){
 
-      $output .= '<section id="map_holder" data-marker="'. get_field('marker_icon', 'options') .'" data-latitude="'. get_field('latitude', 'options') .'" data-longitude="'. get_field('longitude', 'options') .'" data-zoom="'. get_field('zoom', 'options') .'">';
+      $output .= '<section id="map" data-marker="'. get_field('marker_icon', 'options') .'" data-latitude="'. get_field('latitude', 'options') .'" data-longitude="'. get_field('longitude', 'options') .'" data-zoom="'. get_field('zoom', 'options') .'">';
 
-      $output .= '<div class="wrapper" id="map">';
+      $output .= '<div class="wrapper" id="map-wrapper">';
 
       $thumb = wp_get_attachment_image_src( get_field('map_placeholder', 'options'), 'full');
 
@@ -533,7 +533,7 @@ function show_tiles_gallery_func($atts, $content = null) {
 
           if($page == 1){
             $output .= '<div class="tile">';
-            $output .= '<a href="'. get_bloginfo('url') .'/archive-product/" class="view-products-link"><span><span class="icon icon-gallery"></span> View all products</span></a>';
+            $output .= '<a href="#modal-products" data-target="#modal-products" class="view-products-link" rel="gallery-2"><span><span class="icon icon-gallery"></span> View all products</span></a>';
             $output .= '</div>';
           }
 
@@ -545,7 +545,7 @@ function show_tiles_gallery_func($atts, $content = null) {
 
             $output .= '<div class="tile" style="background-image: url('. $imgSrc[0] .')">';
             $output .= '<img src="'. $imgSrc[0] .'" alt="" class="img-responsive">';
-            $output .= '<h3><a data-target="myModal" data-id="'. $post->ID .'" rel="gallery-1" href="#modal-'. $post->ID .'" class="caption"><span>'. get_the_title($post->ID) .'</span></a></h3>';
+            $output .= '<h3><a data-target="#modal-'. $post->ID .'" data-id="'. $post->ID .'" rel="gallery-1" href="#modal-'. $post->ID .'" class="caption"><span>'. get_the_title($post->ID) .'</span></a></h3>';
             $output .= '</div>';
 
           }

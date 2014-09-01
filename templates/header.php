@@ -1,4 +1,4 @@
-<header id="navbar" class="navbar-menu navbar navbar-default navbar-fixed-bottom" role="banner">
+<header id="navbar" class="navbar-menu navbar navbar-default navbar-static-top" role="banner">
   <div class="container">
 
     <div class="navbar-header">

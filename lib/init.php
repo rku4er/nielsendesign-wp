@@ -20,6 +20,7 @@ function roots_setup() {
   // http://codex.wordpress.org/Function_Reference/add_image_size
   add_theme_support('post-thumbnails');
   add_image_size( 'showcase-tile', 480 );
+  add_image_size( 'lightbox-products', 868 );
 
   // Add post formats
   // http://codex.wordpress.org/Post_Formats

@@ -74,7 +74,7 @@ function initCreationBottles(holder){
   }
 }
 
-function initializeMaps(myLatlng, image, zoom) {
+function initializeMaps(selector, myLatlng, image, zoom) {
   var mapOptions = {
     center: myLatlng,
     zoom: zoom,
@@ -93,7 +93,7 @@ function initializeMaps(myLatlng, image, zoom) {
     }
   ];
 
-  var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+  var map = new google.maps.Map(document.getElementById(selector.substr(1) + "-wrapper"), mapOptions);
 
   var mapType = new google.maps.StyledMapType(stylez, { name:"Grayscale" });
 
@@ -123,11 +123,11 @@ function toggleBounce(marker) {
   }
 }
 
-function showGmaps(map_holder){
+function showGmaps(selector){
   // Google Maps
   if(typeof google !== "undefined"){
 
-    var mapHolder = $(map_holder);
+    var mapHolder = $(selector);
     var myLatlng = new google.maps.LatLng(mapHolder.data('latitude'), mapHolder.data('longitude'));
     var image = mapHolder.data('marker');
     var zoom = mapHolder.data('zoom');
@@ -139,8 +139,8 @@ function showGmaps(map_holder){
 
     /* google.maps.event.addDomListener(window, 'load', initialize); */
 
-    $('#map img').on('click', function(){
-      initializeMaps(myLatlng, image, zoom);
+    $(selector).find('img').on('click', function(){
+      initializeMaps(selector, myLatlng, image, zoom);
     });
 
   }
@@ -240,7 +240,73 @@ function initTiles(element) {
 
 }
 
-function loadLightbox(selector){
+function initFullpage(page, nav){
+  var templatePath = $('body').data('template-path');
+  var hashArr = ['home'];
+
+  $(nav).find('ul.navbar-nav a').each(function(){
+    var re = /\w*-?\w*(?=\/$)/gi;
+    var hash = $(this).attr('href').match(re)[0];
+
+    hashArr.push(hash);
+
+    $(this).attr('href', '#' + hash);
+  });
+
+  $('.section-title').addClass('hidden-title');
+
+  $(page).fullpage({
+    css3: true,
+    resize : false,
+    scrollOverflow: false,
+    autoScrolling: false,
+    verticalCentered: true, //buggy here
+    scrollingSpeed: 1000,
+    easing: 'easeOutExpo',
+    menu: nav ? nav : false,
+    anchors: hashArr.length ? hashArr : false,
+    paddingTop: '0',
+    paddingBottom: nav ? $(nav).outerHeight() + 'px' : '0px',
+    keyboardScrolling: true,
+    touchSensitivity: 15,
+    continuousVertical: false,
+    animateAnchor: true,
+    sectionSelector: '.section',
+    slideSelector: '.slide',
+
+    //events
+    onLeave: function(index, nextIndex, direction){},
+    afterLoad: function(anchorLink, index){
+      if(anchorLink === 'creation' && !$('body').data('creation_bottles_loaded')){
+        initCreationBottles('#creation-bottles');
+      }
+      $('#section-'+anchorLink).css({
+        'padding-bottom' : $('#navbar').outerHeight()
+      });
+
+      if(!$('body').data(anchorLink+'-shown')){
+        $('#section-'+ anchorLink + ' .section-title').removeClass('hidden-title');
+        $('body').data(anchorLink+'-shown', true);
+      }
+    },
+    afterRender: function(){
+      $('a[href="#home"]').css('display', 'block').on('click', function(){
+        $('html,body').animate({'scrollTop' : 0}, 1000, 'easeInOutExpo');
+      });
+    },
+    afterResize: function(){
+      $(page).find('.section').each(function(){
+        $(this).css({
+          'padding-bottom' : $(nav).outerHeight()
+        });
+      });
+    },
+    afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
+    onSlideLeave: function(anchorLink, index, slideIndex, direction){}
+  });
+}
+
+function singleProductLightbox(selector){
   var el = $(selector);
   var data = {};
   var output;
@@ -253,11 +319,69 @@ function loadLightbox(selector){
   });
 }
 
+function productsLightbox(selector){
+  var el = $(selector);
+  var data = {};
+  var output;
+
+  data.action = 'getProducts';
+
+  $.post('/wp-admin/admin-ajax.php', data, function(response) {
+    showModal(response, 'products');
+  });
+}
+
 function showModal(response, id){
-  var _modal = $('<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalLabel">Modal title</h4></div><div class="modal-body">' + response + '</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button><button type="button" class="btn btn-primary">Save changes</button></div></div></div></div>');
+  var _modal = $(response);
 
   _modal.prop('id', 'modal-'+id);
   _modal.modal();
+}
+
+function initModals(selector){
+  $(selector).on('click', function(e){
+    e.preventDefault();
+    var url = $(this).attr('href');
+    if ($(url).length) {
+      $(url).modal('show');
+    } else {
+      singleProductLightbox(this);
+    }
+  });
+}
+
+function initProductsModal(selector){
+  $(selector).on('click', function(e){
+    e.preventDefault();
+    var url = $(this).attr('href');
+    if ($(url).length) {
+      $(url).modal('show');
+    } else {
+      productsLightbox(this);
+    }
+  });
+}
+
+function navbarControl(section, nav){
+  $(section).waypoint(function() {
+      console.log(1);
+      if($(nav).is(':visible')){
+        $(nav).css('opacity', 1).animate({'opacity': 0}, 400, 'easeOutExpo', function(){
+          $(this).css({
+            'opacity' : 0,
+            'display' : 'none'
+          });
+        });
+      }else{
+        $(nav).css('display', 'block').animate({'opacity': 1}, 400, 'easeInExpo', function(){
+          $(this).css({
+            'opacity' : 1
+          });
+        });
+      }
+  }, { offset: function(){
+      return $.waypoints('viewportHeight');
+  }});
 }
 
 
@@ -276,87 +400,28 @@ var Roots = {
 
       requiredFieldsText('(Required)');
 
-      showGmaps('#map_holder');
+      // google maps
+      showGmaps('#map');
 
+      // tile grid gallery
       initTiles('.tile-grid');
 
-      $('a[rel=gallery-1]').on('click', function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        if ($(url).length) {
-          $(url).modal('show');
-        } else {
-          loadLightbox(this);
-        }
-      });
+      // lightbox for gallery 1
+      initModals('a[rel=gallery-1]');
+
+      initProductsModal('a[rel=gallery-2]');
     }
   },
   // Home page
   home: {
     init: function() {
       // JavaScript to be fired on the home page
-      //$('#columns').columnize({ columns: 2, buildOnce: false });
-      var templatePath = $('body').data('template-path');
-      var hashArr = ['home'];
-      //var bgArr = [templatePath + '/assets/img/bg/home.jpg'];
 
-      $('#menu-main-menu a').each(function(){
-        var re = /\w*-?\w*(?=\/$)/gi;
-        var hash = $(this).attr('href').match(re)[0];
+      // Navbar control
+      navbarControl('.content-info', '#navbar');
 
-        hashArr.push(hash);
-        //bgArr.push(templatePath + '/assets/img/bg/' + hash + '.jpg');
-        $(this).attr('href', '#' + hash);
-      });
-
-      /*$('#fullpage .section').each(function(i){
-        $(this).css({
-          'background-image' : 'url(' + bgArr[i] + ')'
-        });
-      });*/
-
-      $('#fullpage').fullpage({
-        css3: true,
-        resize : false,
-        scrollOverflow: false,
-        autoScrolling: false,
-        verticalCentered: true, //buggy here
-        scrollingSpeed: 1000,
-        easing: 'easeOutExpo',
-        menu: '#navbar',
-        anchors: hashArr,
-        paddingTop: '10px',
-        paddingBottom: $('#navbar').outerHeight() + 'px',
-        keyboardScrolling: true,
-        touchSensitivity: 15,
-        continuousVertical: false,
-        animateAnchor: true,
-        sectionSelector: '.section',
-        slideSelector: '.slide',
-
-        //events
-        onLeave: function(index, nextIndex, direction){},
-        afterLoad: function(anchorLink, index){
-          if(anchorLink === 'creation' && !$('body').data('creation_bottles_loaded')){
-            initCreationBottles('#creation-bottles');
-          }
-          $('#section-'+anchorLink).css({
-            'padding-bottom' : $('#navbar').outerHeight()
-          });
-        },
-        afterRender: function(){
-
-        },
-        afterResize: function(){
-          $('#fullpage .section').each(function(){
-            $(this).css({
-              'padding-bottom' : $('#navbar').outerHeight()
-            });
-          });
-        },
-        afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex){},
-        onSlideLeave: function(anchorLink, index, slideIndex, direction){}
-      });
+      // Fullpage setup
+      initFullpage('#fullpage', '#navbar');
     }
   },
   // About us page, note the change from about-us to about_us.
