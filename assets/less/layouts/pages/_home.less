@@ -1,26 +1,23 @@
-#fullpage{
-    background-image: url(../img/bg/loader.gif);
-    background-repeat: no-repeat;
-    background-position: 50% 300px;
+body.home{
 
-    .section{
-        display: table;
-        width: 100%;
-        table-layout: fixed;
+    .panel{
+
+        border: 0 none;
+        border-radius: 0;
+        box-shadow: none;
+        margin-bottom: 0;
+        background-color: transparent;
         background-image: url("../img/bg/noise.png");
 
-        .tableCell{
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        .section-title{
+        .panel-title{
             color: @brand-primary;
             margin-bottom: @line-height-computed * 2;
-
+            font-size: 34px;
+            margin-top: 30px;
         }
+
         .brand-name,
-        .section-title{
+        .panel-title{
             .translate(-200px, 0);
         }
         .brand-description,
@@ -31,6 +28,7 @@
         .gform_wrapper,
         .tiles-wrapper,
         #map,
+        #creation-bottles,
         #showcase-gallery,
         #contact-info,
         #recognition-testimonials,
@@ -48,10 +46,11 @@
         .brand-name,
         .brand-description,
         .container p,
-        .section-title,
+        .panel-title,
         .gform_wrapper,
         .tiles-wrapper,
         #map,
+        #creation-bottles,
         #home-slider,
         #showcase-gallery,
         #contact-info,
@@ -68,10 +67,11 @@
             .brand-name,
             .brand-description,
             .container p,
-            .section-title,
+            .panel-title,
             .gform_wrapper,
             .tiles-wrapper,
             #map,
+            #creation-bottles,
             #home-slider,
             #showcase-gallery,
             #contact-info,
@@ -81,244 +81,6 @@
                 .translate(0, 0);
                 .scale(1);
                 opacity: 1;
-            }
-        }
-    }
-    .wp-caption{
-        background-color: transparent;
-        border: 0 none;
-        padding: 0;
-        margin-bottom: 40px;
-
-        img{
-            margin-bottom: 30px;
-        }
-
-        .wp-caption-text{
-            padding: 0;
-            font-size: 14px;
-            color: @gray-light;
-            max-width: 300px;
-        }
-    }
-}
-
-#section-home{
-    padding-top: 53px;
-
-    .brand-name{
-        color: @brand-primary;
-        font-size: 34px;
-        margin: 30px 0 0;
-    }
-    .brand-description{
-        font-size: 20px;
-        margin-bottom: 30px;
-    }
-}
-
-body.home .navbar-default{
-
-    .navbar-brand{
-        visibility: hidden;
-        position: absolute;
-    }
-
-    .navbar-toggle{
-        border-color: @brand-primary;
-        background-color: #fff;
-
-        .icon-bar{
-            background-color: @brand-primary;
-        }
-
-        &.collapsed{
-            background-color: transparent;
-        }
-
-        &:hover{
-            background-color: #FFF;
-        }
-    }
-
-    @media (max-width: @screen-xs-max){
-        .navbar-collapse{
-            background-color: #FFF;
-            float: right;
-            width: 50%;
-            min-width: 240px;
-            border-top-color: @brand-primary;
-
-            .box-shadow(0px 3px 5px rgba(0,0,0,0.3));
-
-            .navbar-nav{
-                padding: 15px 0;
-            }
-        }
-    }
-
-    &.navbar-menu{
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: 0;
-        margin-bottom: 0;
-
-        @media (min-width: @screen-sm-min){
-            top: auto;
-            bottom: 0;
-        }
-
-        background-color: #fff;
-        border-color: transparent;
-
-        @media (max-width: @screen-xs-max){
-            background-color: transparent;
-        }
-
-        .navbar-nav{
-            float: none;
-
-            @media (min-width: @screen-sm-min){
-                text-align: center;
-            }
-
-            >li{
-                float: none;
-                display: inline-block;
-                width: 100%;
-
-                &.active{
-                    background-image: url("../img/bg/noise.png");
-                }
-
-                @media (min-width: @screen-sm-min){
-                    width: auto;
-                }
-
-                @media (min-width: @screen-md-min){
-                    margin: 0 1%;
-                }
-
-                @media (min-width: @screen-lg-min){
-                    margin: 0 2%;
-                }
-
-                > a{
-                    text-align: left;
-                    padding-top: 15px;
-                    padding-bottom: 15px;
-                    padding-left: 80px;
-
-                    @media (min-width: @screen-sm-min){
-
-                        padding: 10px 15px;
-                        text-align: center;
-                    }
-                }
-
-                .icon{
-                    display: block;
-                    font-size: 1.6em;
-                    margin-bottom: 3px;
-                    text-align: center;
-                    width: 50px;
-                    position: absolute;
-                    left: 15px;
-                    top: 0.5em;
-
-                    @media (min-width: @screen-sm-min){
-                        position: static;
-                        margin-right: 0;
-                        font-size: 2em;
-                        width: auto;
-                    }
-
-                    @media (min-width: @screen-md-min){
-                        font-size: 3em;
-                    }
-                }
-            }
-        }
-    }
-
-    &.navbar-contacts{
-        background-color: #FFF;
-        border-width: 0 0 1px;
-        border-color: lighten(@brand-primary, 40);
-
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        margin: 0;
-        z-index: 1;
-
-        padding-right: 70px;
-
-        color: @brand-primary;
-
-        .navbar-nav{
-            float: none;
-            text-align: right;
-            margin: 0;
-
-            >li{
-                float: none;
-                display: inline-block;
-                vertical-align: top;
-
-                >a{
-                    color: @brand-primary;
-                    padding-top: 14px;
-                    padding-bottom: 14px;
-
-                    &:hover,
-                    &:focus{
-                        color: darken(@brand-primary, 10%);
-                    }
-                }
-
-                .icon{
-                    margin-right: 5px;
-                }
-            }
-        }
-
-        .navbar-text{
-            display: inline-block;
-            color: @brand-primary;
-
-            .icon{
-                font-size: 1.3em;
-            }
-        }
-    }
-
-    .navbar-nav{
-        margin: 0;
-
-        > li{
-
-            > a{
-                color: @brand-primary;
-                outline: none;
-                padding-top: 14px;
-                padding-bottom: 14px;
-                text-align: center;
-
-                .transition(color .2s ease);
-
-                &:hover{
-                    color: darken(@brand-primary, 10);
-                }
-            }
-
-            &.active >a,
-            &.active >a:hover,
-            &.active >a:focus{
-                background-color: transparent;
-                color: darken(@brand-primary, 10);
             }
         }
     }
@@ -337,8 +99,7 @@ body.home .navbar-default{
         width: 100%;
     }
     .item img{
-        max-height: 100%;
-        width: auto;
+        height: 100%;
         opacity: 0;
         visibility: hidden;
         margin: 0 auto;
@@ -351,6 +112,34 @@ body.home .navbar-default{
     }
 }
 
-#section-contact{
-    padding-bottom: 0 !important;
+#panel-home{
+    .brand-name{
+        color: @brand-primary;
+        font-size: 34px;
+        margin: 30px 0 0;
+    }
+    .brand-description{
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+}
+
+#panel-nielsen-design{
+    .wp-caption{
+        background-color: transparent;
+        border: 0 none;
+        padding: 0;
+        margin-bottom: 40px;
+
+        img{
+            margin-bottom: 30px;
+        }
+
+        .wp-caption-text{
+            padding: 0;
+            font-size: 14px;
+            color: @gray-light;
+            max-width: 300px;
+        }
+    }
 }

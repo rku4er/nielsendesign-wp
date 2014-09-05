@@ -1,4 +1,37 @@
-<header id="navbar" class="navbar-menu navbar navbar-default navbar-fixed-top" role="banner">
+<?php if(have_rows('contacts', 'options')): ?>
+<nav id="navbar" class="navbar-contacts navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <ul class="nav navbar-nav navbar-right">
+        <?php while(have_rows('contacts', 'options')): the_row(); ?>
+            <li>
+                <?php if(get_sub_field('url')): ?>
+                    <a href="<?php echo get_sub_field('url'); ?>" <?php if(get_sub_field('new_widnow')) echo 'target="_blank"'; ?>>
+                <?php else: ?>
+                    <span class="navbar-text">
+                <?php endif; ?>
+
+                <?php if(get_sub_field('icon_slug')): ?>
+                    <span class="icon <?php echo get_sub_field('icon_slug'); ?>"></span>
+                <?php endif; ?>
+
+                <?php echo get_sub_field('text'); ?>
+
+                <?php if(get_sub_field('url')): ?>
+                    </a>
+                <?php else: ?>
+                    </span>
+                <?php endif; ?>
+            </li>
+        <?php endwhile; ?>
+            <li>
+                <?php get_search_form(); ?>
+            </li>
+        </ul>
+    </div>
+</nav>
+<?php endif; ?>
+
+<header id="mainnav" class="navbar-menu navbar navbar-default navbar-fixed-bottom" role="banner">
   <div class="container">
 
     <div class="navbar-header">
@@ -9,9 +42,7 @@
         <span class="icon-bar"></span>
       </button>
 
-      <span class="menu-item" data-menuanchor="home">
-        <a href="<?php echo get_bloginfo('url'); ?>" class="navbar-brand"><span class="glyphicon glyphicon-home"></span>Home</a>
-      </span>
+      <a href="<?php echo get_bloginfo('url'); ?>" class="navbar-brand"><span class="glyphicon glyphicon-home"></span>Home</a>
     </div>
 
     <nav class="collapse navbar-collapse" role="navigation">

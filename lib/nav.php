@@ -24,7 +24,6 @@ class Roots_Nav_Walker extends Walker_Nav_Menu {
     parent::start_el($item_html, $item, $depth, $args);
 
     $slug = sanitize_title($item->title);
-    $item_html = str_replace('<li', '<li data-menuanchor="'. $slug .'"', $item_html);
     $item_html = preg_replace('/<a[^>]*>/i', '$0<span class="icon icon-page-' . $slug . '"></span>', $item_html);
 
     if ($item->is_dropdown && ($depth === 0)) {
