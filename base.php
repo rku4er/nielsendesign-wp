@@ -13,7 +13,6 @@
   ?>
 
   <div class="wrap" role="document">
-    <?php if(get_page_template_slug( get_the_ID() ) != 'template-home.php'): ?><div class="container"><?php endif; ?>
       <div class="content row">
         <main class="main <?php echo roots_main_class(); ?>" role="main">
           <?php include roots_template_path(); ?>
@@ -24,7 +23,6 @@
           </aside><!-- /.sidebar -->
         <?php endif; ?>
       </div><!-- /.content -->
-    <?php if(get_page_template_slug( get_the_ID() ) != 'template-home.php'): ?></div><?php endif; ?>
     <?php get_template_part('templates/footer'); ?>
 
   </div><!-- /.wrap -->

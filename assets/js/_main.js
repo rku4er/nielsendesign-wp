@@ -76,6 +76,7 @@ function initCreationBottles(holder){
 
 function initializeMaps(selector, myLatlng, image, zoom) {
   var mapOptions = {
+    scrollwheel: false,
     center: myLatlng,
     zoom: zoom,
     mapTypeControlOptions: {
@@ -139,9 +140,18 @@ function showGmaps(selector){
 
     /* google.maps.event.addDomListener(window, 'load', initialize); */
 
-    $(selector).find('img').on('click', function(){
+    /*$(selector).find('img').on('click', function(){
       initializeMaps(selector, myLatlng, image, zoom);
-    });
+    });*/
+
+    setTimeout(function(){
+      $(selector).find('img').waypoint(function() {
+        if(!$(this).data('map_loaded')){
+          initializeMaps(selector, myLatlng, image, zoom);
+          $(this).data('map_loaded', true);
+        }
+      }, { offset: 'bottom-in-view'});
+    }, 100);
 
   }
 }
@@ -158,6 +168,7 @@ function initTiles(element) {
 
     $(element).each(function(i){
 
+      var dataTemplate = $(this).data('template');
       var demoTemplateRows = [
         [
             " A A A A B B B B B B C C C F F F F F F F F F I I I I I I J J J J L L L L L M M M M M M",
@@ -172,28 +183,20 @@ function initTiles(element) {
             " D D D D E E E E E E E E E G G G G G H H H H I I I I I I K K K K K K K K K O O O O O O",
             " D D D D E E E E E E E E E G G G G G H H H H I I I I I I K K K K K K K K K O O O O O O",
             " D D D D E E E E E E E E E G G G G G H H H H I I I I I I K K K K K K K K K O O O O O O"
-        ],
-        [
-            " A A A A A B B B B B B B C C C C C C C C C F F F F F I I I I I I J J J J J M M M M M M",
-            " A A A A A B B B B B B B C C C C C C C C C F F F F F I I I I I I J J J J J M M M M M M",
-            " A A A A A B B B B B B B C C C C C C C C C F F F F F I I I I I I J J J J J M M M M M M",
-            " A A A A A B B B B B B B C C C C C C C C C F F F F F I I I I I I K K K K K M M M M M M",
-            " A A A A A B B B B B B B P P P P G G G G G F F F F F I I I I I I K K K K K N N N N N N",
-            " D D D D D B B B B B B B P P P P G G G G G F F F F F I I I I I I K K K K K N N N N N N",
-            " D D D D D E E E E E E E P P P P G G G G G F F F F F I I I I I I K K K K K N N N N N N",
-            " D D D D D E E E E E E E P P P P G G G G G F F F F F H H H H H H K K K K K N N N N N N",
-            " D D D D D E E E E E E E Q Q Q Q G G G G G F F F F F H H H H H H K K K K K O O O O O O",
-            " D D D D D E E E E E E E Q Q Q Q G G G G G F F F F F H H H H H H K K K K K O O O O O O",
-            " D D D D D E E E E E E E Q Q Q Q G G G G G F F F F F H H H H H H K K K K K O O O O O O",
-            " D D D D D E E E E E E E Q Q Q Q G G G G G F F F F F H H H H H H K K K K K O O O O O O"
         ]
       ];
+
+      demoTemplateRows.push(dataTemplate);
+
+      $(this).removeAttr('data-template');
 
       var el = $(this),
         grid = new Tiles.Grid(el),
         tiles = el.children('.tile');
 
       var TILE_IDS = el.data('ids-array');
+
+      $(this).removeAttr('data-ids-array');
 
       // template is selected by user, not generated so just
       // return the number of columns in the current template
@@ -211,9 +214,9 @@ function initTiles(element) {
           return tile;
       };
 
-      function updateTemplate(index, template){
+      function updateTemplate(template){
         // get the JSON rows for the selection
-        var rows = template[index] ? template[index] : template[0];
+        var rows = template[1] ? template[1] : template[0];
 
         // set the new template and resize the grid
         grid.template = Tiles.Template.fromJSON(rows);
@@ -226,11 +229,9 @@ function initTiles(element) {
         grid.redraw(true);
       }
 
-      var templateID = i;
-
       // wait until users finishes resizing the browser
       var debouncedResize = debounce(function() {
-          updateTemplate(templateID, demoTemplateRows);
+          updateTemplate(demoTemplateRows);
       }, 100);
 
       // when the window resizes, redraw the grid
@@ -244,12 +245,11 @@ function initFullpage(page, nav){
   var templatePath = $('body').data('template-path');
   var hashArr = ['home'];
 
-  $(nav).find('ul.navbar-nav a').each(function(){
+  $(nav).find('ul.navbar-nav li a').each(function(){
     var re = /\w*-?\w*(?=\/$)/gi;
     var hash = $(this).attr('href').match(re)[0];
 
     hashArr.push(hash);
-
     $(this).attr('href', '#' + hash);
   });
 
@@ -260,7 +260,7 @@ function initFullpage(page, nav){
     resize : false,
     scrollOverflow: false,
     autoScrolling: false,
-    verticalCentered: true, //buggy here
+    verticalCentered: false, //buggy here
     scrollingSpeed: 1000,
     easing: 'easeOutExpo',
     menu: nav ? nav : false,
@@ -281,23 +281,44 @@ function initFullpage(page, nav){
         initCreationBottles('#creation-bottles');
       }
       $('#section-'+anchorLink).css({
-        'padding-bottom' : $('#navbar').outerHeight()
+        'padding-top' : $('.navbar-contacts').outerHeight()
       });
-
+      $('#section-'+anchorLink).css({
+        'padding-bottom' : $(nav).outerHeight()
+      });
       if(!$('body').data(anchorLink+'-shown')){
-        $('#section-'+ anchorLink + ' .section-title').removeClass('hidden-title');
+        $('#section-'+ anchorLink).addClass('animated');
         $('body').data(anchorLink+'-shown', true);
       }
     },
     afterRender: function(){
+      // Back to top button
       $('a[href="#home"]').css('display', 'block').on('click', function(){
         $('html,body').animate({'scrollTop' : 0}, 1000, 'easeInOutExpo');
       });
+
+      // Slider.height.tweaks
+      var slider = $('#home-slider');
+      if(slider.length){
+        var sliderOffset = slider.offset();
+        var sliderHeight = $(window).height() - $(nav).height() - sliderOffset.top;
+        slider.css({
+          'height' : Math.round(sliderHeight) + 'px'
+        });
+      }
+
+      //fire animation
+      $(page).find('.section:first').addClass('animated');
+
     },
     afterResize: function(){
       $(page).find('.section').each(function(){
-        $(this).css({
+        var self = $(this);
+        self.css({
           'padding-bottom' : $(nav).outerHeight()
+        });
+        $('#section-home').css({
+          'padding-top' : $('.navbar-contacts').outerHeight()
         });
       });
     },
@@ -362,26 +383,23 @@ function initProductsModal(selector){
   });
 }
 
-function navbarControl(section, nav){
-  $(section).waypoint(function() {
-      console.log(1);
-      if($(nav).is(':visible')){
-        $(nav).css('opacity', 1).animate({'opacity': 0}, 400, 'easeOutExpo', function(){
-          $(this).css({
-            'opacity' : 0,
-            'display' : 'none'
-          });
+function initWaypoints(selector, nav){
+  $(selector).waypoint(function() {
+    if($(nav).is(':visible')){
+      $(nav).css('opacity', 1).animate({'opacity': 0}, 400, 'easeOutExpo', function(){
+        $(this).css({
+          'opacity' : 0,
+          'display' : 'none'
         });
-      }else{
-        $(nav).css('display', 'block').animate({'opacity': 1}, 400, 'easeInExpo', function(){
-          $(this).css({
-            'opacity' : 1
-          });
+      });
+    }else{
+      $(nav).css('display', 'block').animate({'opacity': 1}, 400, 'easeInExpo', function(){
+        $(this).css({
+          'opacity' : 1
         });
-      }
-  }, { offset: function(){
-      return $.waypoints('viewportHeight');
-  }});
+      });
+    }
+  }, { offset: 'bottom-in-view'});
 }
 
 
@@ -394,10 +412,12 @@ var Roots = {
       // JavaScript to be fired on all pages
       initCrewPersons('#crew-tiles');
 
+      // init creation bottles animation
       if(!$('body.home').length){
         initCreationBottles('#creation-bottles');
       }
 
+      // Replacement for required text
       requiredFieldsText('(Required)');
 
       // google maps
@@ -407,8 +427,9 @@ var Roots = {
       initTiles('.tile-grid');
 
       // lightbox for gallery 1
-      initModals('a[rel=gallery-1]');
+      //initModals('a[rel=gallery-1]');
 
+      // lightbox for 'view all products' link
       initProductsModal('a[rel=gallery-2]');
     }
   },
@@ -417,11 +438,11 @@ var Roots = {
     init: function() {
       // JavaScript to be fired on the home page
 
-      // Navbar control
-      navbarControl('.content-info', '#navbar');
-
-      // Fullpage setup
-      initFullpage('#fullpage', '#navbar');
+      // Load home scripts
+      $(window).load(function(){
+        initFullpage('#fullpage', '#navbar');
+        initWaypoints('#fullpage', '#navbar');
+      });
     }
   },
   // About us page, note the change from about-us to about_us.

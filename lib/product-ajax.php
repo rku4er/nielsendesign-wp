@@ -107,7 +107,7 @@ function getProducts(){
 
         if($posts){
 
-          $output .= '<section id="product-gallery-'. $ID .'" class="carousel carousel-slide" data-ride="carousel" data-interval="0">';
+          $output .= '<section id="product-gallery" class="carousel carousel-slide" data-ride="carousel" data-interval="0">';
 
           $output .= '<div class="carousel-inner">';
 
@@ -115,7 +115,6 @@ function getProducts(){
 
           foreach($posts as $post){
             setup_postdata($post);
-            FB::log($post);
             $i++;
 
             $isActive = ($i == 1) ? 'active' : '';
@@ -137,11 +136,11 @@ function getProducts(){
 
           $output .= '</div>';
 
-          $output .= '<a class="left carousel-control" href="#product-gallery-'. $ID .'" role="button" data-slide="prev">';
+          $output .= '<a class="left carousel-control" href="#product-gallery" role="button" data-slide="prev">';
           $output .= '<span class="glyphicon glyphicon-chevron-left"></span>';
           $output .= '</a>';
 
-          $output .= '<a class="right carousel-control" href="#product-gallery-'. $ID .'" role="button" data-slide="next">';
+          $output .= '<a class="right carousel-control" href="#product-gallery" role="button" data-slide="next">';
           $output .= '<span class="glyphicon glyphicon-chevron-right"></span>';
           $output .= '</a>';
 

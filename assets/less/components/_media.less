@@ -1,6 +1,23 @@
 // Captions
 .wp-caption {
   &:extend(.thumbnail all);
+
+  @media (max-width: @screen-sm-max){
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  @media (max-width: @screen-sm-max){
+    max-width: 50% !important;
+
+    img{
+        width: 100%;
+    }
+  }
+
+  @media (max-width: @screen-xs-max){
+    max-width: 100% !important;
+  }
 }
 
 .wp-caption-text {

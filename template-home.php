@@ -13,46 +13,49 @@ Template Name: Home
     }
 </style>
 
-<div id="fullpage">
+<?php if(have_rows('contacts', 'options')): ?>
+<nav class="navbar-contacts navbar navbar-default">
+    <div class="container">
+        <ul class="nav navbar-nav">
+        <?php while(have_rows('contacts', 'options')): the_row(); ?>
+            <li>
+                <?php if(get_sub_field('url')): ?>
+                    <a href="<?php echo get_sub_field('url'); ?>" <?php if(get_sub_field('new_widnow')) echo 'target="_blank"'; ?>>
+                <?php else: ?>
+                    <span class="navbar-text">
+                <?php endif; ?>
+
+                <?php if(get_sub_field('icon_slug')): ?>
+                    <span class="icon <?php echo get_sub_field('icon_slug'); ?>"></span>
+                <?php endif; ?>
+
+                <?php echo get_sub_field('text'); ?>
+
+                <?php if(get_sub_field('url')): ?>
+                    </a>
+                <?php else: ?>
+                    </span>
+                <?php endif; ?>
+            </li>
+        <?php endwhile; ?>
+            <li>
+                <?php get_search_form(); ?>
+            </li>
+        </ul>
+    </div>
+</nav>
+<?php endif; ?>
+
+<div id="fullpage" style="background-image: url(<?php echo get_template_directory_uri(); ?>/assets/img/bg/loader.gif)">
 
     <div class="section" id="section-home">
-        <?php if(have_rows('contacts', 'options')): ?>
-        <nav class="navbar-contacts navbar navbar-default">
-            <div class="container">
-                <ul class="nav navbar-nav">
-                <?php while(have_rows('contacts', 'options')): the_row(); ?>
-                    <li>
-                        <?php if(get_sub_field('url')): ?>
-                            <a href="<?php echo get_sub_field('url'); ?>" <?php if(get_sub_field('new_widnow')) echo 'target="_blank"'; ?>>
-                        <?php else: ?>
-                            <span class="navbar-text">
-                        <?php endif; ?>
-
-                        <?php if(get_sub_field('icon_slug')): ?>
-                            <span class="icon <?php echo get_sub_field('icon_slug'); ?>"></span>
-                        <?php endif; ?>
-
-                        <?php echo get_sub_field('text'); ?>
-
-                        <?php if(get_sub_field('url')): ?>
-                            </a>
-                        <?php else: ?>
-                            </span>
-                        <?php endif; ?>
-                    </li>
-                <?php endwhile; ?>
-                </ul>
-            </div>
-        </nav>
-        <?php endif; ?>
-
         <div class="container">
             <h1 class="brand-name"><?php echo get_bloginfo('name'); ?></h1>
             <p class="brand-description"><?php echo get_bloginfo('description'); ?></p>
-            <?php while (have_posts()) : the_post(); ?>
-                <?php get_template_part('templates/content', 'page'); ?>
-            <?php endwhile; ?>
         </div>
+        <?php while (have_posts()) : the_post(); ?>
+            <?php get_template_part('templates/content', 'page'); ?>
+        <?php endwhile; ?>
     </div>
 
     <?php
@@ -68,8 +71,8 @@ Template Name: Home
                 $post = get_post($item->object_id);
                 setup_postdata($post);
                 echo '<div class="section" id="section-' . $post->post_name . '">';
-                echo '<div class="container">';
-                echo '<h2 class="section-title">' . get_the_title() . '</h2>';
+                echo '<div class="tableCell">';
+                echo '<div class="container"><h2 class="section-title">' . get_the_title() . '</h2></div>';
                 the_content();
                 echo '</div>';
                 echo '</div>';

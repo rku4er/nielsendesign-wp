@@ -65,6 +65,18 @@ function roots_scripts() {
 }
 add_action('wp_enqueue_scripts', 'roots_scripts', 100);
 
+/**
+ * Include styles for showcase gallery template field
+ */
+function template_field_admin_init() {
+   wp_register_style( 'template_style', get_template_directory_uri().'/assets/css/template-field.css');
+}
+add_action( 'admin_init', 'template_field_admin_init' );
+function template_field_styles() {
+   wp_enqueue_style( 'template_style');
+}
+add_action( 'admin_print_styles', 'template_field_styles' );
+
 // http://wordpress.stackexchange.com/a/12450
 function roots_jquery_local_fallback($src, $handle = null) {
   static $add_jquery_fallback = false;

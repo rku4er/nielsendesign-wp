@@ -1,18 +1,86 @@
 #fullpage{
+    background-image: url(../img/bg/loader.gif);
+    background-repeat: no-repeat;
+    background-position: 50% 300px;
+
     .section{
+        display: table;
+        width: 100%;
+        table-layout: fixed;
         background-image: url("../img/bg/noise.png");
+
+        .tableCell{
+            display: table-cell;
+            vertical-align: middle;
+        }
 
         .section-title{
             color: @brand-primary;
+            margin-bottom: @line-height-computed * 2;
 
-            .translate(0, 0);
-            opacity: 1;
+        }
+        .brand-name,
+        .section-title{
+            .translate(-200px, 0);
+        }
+        .brand-description,
+        .container p{
+            .translate(0, 100px);
+        }
+        .wp-caption,
+        .gform_wrapper,
+        .tiles-wrapper,
+        #map,
+        #showcase-gallery,
+        #contact-info,
+        #recognition-testimonials,
+        #recognition-carousel{
+            .translate(0, 200px);
+        }
+        .tiles-wrapper,
+        #map,
+        #showcase-gallery,
+        #recognition-testimonials,
+        #home-slider{
+            .scale(0.9);
+        }
+        .wp-caption,
+        .brand-name,
+        .brand-description,
+        .container p,
+        .section-title,
+        .gform_wrapper,
+        .tiles-wrapper,
+        #map,
+        #home-slider,
+        #showcase-gallery,
+        #contact-info,
+        #recognition-testimonials,
+        #recognition-carousel,
+        #recognition-testimonials >div{
+            opacity: 0;
 
-            .transition(all .3s ease-in-out);
+            .transition(all .5s ease-in-out);
+        }
 
-            &.hidden-title{
-                .translate(-200px, 0);
-                opacity: 0;
+        &.animated{
+            .wp-caption,
+            .brand-name,
+            .brand-description,
+            .container p,
+            .section-title,
+            .gform_wrapper,
+            .tiles-wrapper,
+            #map,
+            #home-slider,
+            #showcase-gallery,
+            #contact-info,
+            #recognition-testimonials,
+            #recognition-carousel,
+            #recognition-testimonials >div{
+                .translate(0, 0);
+                .scale(1);
+                opacity: 1;
             }
         }
     }
@@ -36,7 +104,7 @@
 }
 
 #section-home{
-    padding-top: 53px !important;
+    padding-top: 53px;
 
     .brand-name{
         color: @brand-primary;
@@ -47,13 +115,146 @@
         font-size: 20px;
         margin-bottom: 30px;
     }
+}
 
-    .navbar-contacts{
+body.home .navbar-default{
+
+    .navbar-brand{
+        visibility: hidden;
         position: absolute;
+    }
+
+    .navbar-toggle{
+        border-color: @brand-primary;
+        background-color: #fff;
+
+        .icon-bar{
+            background-color: @brand-primary;
+        }
+
+        &.collapsed{
+            background-color: transparent;
+        }
+
+        &:hover{
+            background-color: #FFF;
+        }
+    }
+
+    @media (max-width: @screen-xs-max){
+        .navbar-collapse{
+            background-color: #FFF;
+            float: right;
+            width: 50%;
+            min-width: 240px;
+            border-top-color: @brand-primary;
+
+            .box-shadow(0px 3px 5px rgba(0,0,0,0.3));
+
+            .navbar-nav{
+                padding: 15px 0;
+            }
+        }
+    }
+
+    &.navbar-menu{
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        margin-bottom: 0;
+
+        @media (min-width: @screen-sm-min){
+            top: auto;
+            bottom: 0;
+        }
+
+        background-color: #fff;
+        border-color: transparent;
+
+        @media (max-width: @screen-xs-max){
+            background-color: transparent;
+        }
+
+        .navbar-nav{
+            float: none;
+
+            @media (min-width: @screen-sm-min){
+                text-align: center;
+            }
+
+            >li{
+                float: none;
+                display: inline-block;
+                width: 100%;
+
+                &.active{
+                    background-image: url("../img/bg/noise.png");
+                }
+
+                @media (min-width: @screen-sm-min){
+                    width: auto;
+                }
+
+                @media (min-width: @screen-md-min){
+                    margin: 0 1%;
+                }
+
+                @media (min-width: @screen-lg-min){
+                    margin: 0 2%;
+                }
+
+                > a{
+                    text-align: left;
+                    padding-top: 15px;
+                    padding-bottom: 15px;
+                    padding-left: 80px;
+
+                    @media (min-width: @screen-sm-min){
+
+                        padding: 10px 15px;
+                        text-align: center;
+                    }
+                }
+
+                .icon{
+                    display: block;
+                    font-size: 1.6em;
+                    margin-bottom: 3px;
+                    text-align: center;
+                    width: 50px;
+                    position: absolute;
+                    left: 15px;
+                    top: 0.5em;
+
+                    @media (min-width: @screen-sm-min){
+                        position: static;
+                        margin-right: 0;
+                        font-size: 2em;
+                        width: auto;
+                    }
+
+                    @media (min-width: @screen-md-min){
+                        font-size: 3em;
+                    }
+                }
+            }
+        }
+    }
+
+    &.navbar-contacts{
+        background-color: #FFF;
+        border-width: 0 0 1px;
+        border-color: lighten(@brand-primary, 40);
+
+        position: fixed;
         top: 0;
         left: 0;
         right: 0;
         margin: 0;
+        z-index: 1;
+
+        padding-right: 70px;
 
         color: @brand-primary;
 
@@ -93,94 +294,6 @@
             }
         }
     }
-}
-
-body.home .navbar-menu{
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin-bottom: 0;
-
-    .navbar-brand{
-        display: none;
-    }
-
-    &.navbar-menu{
-        background-color: rgba(255,255,255, 0.8);
-        border-color: transparent;
-
-        .navbar-nav{
-            float: none;
-
-            @media (min-width: @screen-sm-min){
-                text-align: center;
-            }
-
-            >li{
-                float: none;
-                display: inline-block;
-                width: 100%;
-
-                &.active{
-                    background-image: url("../img/bg/noise.png");
-                }
-
-                @media (min-width: @screen-sm-min){
-                    width: auto;
-                }
-
-                @media (min-width: @screen-md-min){
-                    margin: 0 1%;
-                }
-
-                @media (min-width: @screen-lg-min){
-                    margin: 0 2%;
-                }
-
-                > a{
-                    text-align: left;
-                    padding-top: 10px;
-                    padding-bottom: 10px;
-                    padding-left: 70px;
-
-                    @media (min-width: @screen-sm-min){
-
-                        padding-left: 15px;
-                        text-align: center;
-                    }
-                }
-
-                .icon{
-                    display: block;
-                    font-size: 1.6em;
-                    margin-bottom: 3px;
-                    text-align: center;
-                    width: 50px;
-                    position: absolute;
-                    left: 0;
-                    top: 0.3em;
-
-                    @media (min-width: @screen-sm-min){
-                        position: static;
-                        margin-right: 0;
-                        font-size: 2em;
-                        width: auto;
-                    }
-
-                    @media (min-width: @screen-md-min){
-                        font-size: 3em;
-                    }
-                }
-            }
-        }
-    }
-
-    &.navbar-contacts{
-        background-color: #FFF;
-        border-width: 0 0 1px;
-        border-color: #ECF6F6;
-    }
 
     .navbar-nav{
         margin: 0;
@@ -209,4 +322,35 @@ body.home .navbar-menu{
             }
         }
     }
+}
+
+#home-slider{
+    @media (max-width: @screen-md-max){
+        height: auto !important;
+    }
+    .carousel-inner{
+        height: 100%;
+    }
+    &,
+    .item,
+    .item img{
+        width: 100%;
+    }
+    .item img{
+        max-height: 100%;
+        width: auto;
+        opacity: 0;
+        visibility: hidden;
+        margin: 0 auto;
+    }
+    .item{
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        background-size: cover;
+    }
+}
+
+#section-contact{
+    padding-bottom: 0 !important;
 }

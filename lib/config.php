@@ -56,6 +56,8 @@ function roots_display_sidebar() {
       //'is_front_page',
       //'is_404',
       'is_page',
+      'is_single',
+      'is_search',
       //array('is_page', array(42, 'page-slug', 'Page Title'))
     ),
     /**

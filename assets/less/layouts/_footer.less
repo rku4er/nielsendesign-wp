@@ -1,5 +1,19 @@
 .content-info{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     font-size: 12px;
+    background-color: @brand-primary;
+    color: #fff;
+
+    @media (min-width: @screen-sm-min){
+        font-size: 14px;
+    }
+
+    @media (min-width: @screen-md-min){
+        font-size: 16px;
+    }
 
     .widget-columns{
         padding-top: 11px;
@@ -32,10 +46,11 @@
                     content: "|";
                     display: inline-block;
                     margin-right: 3px;
+                    color: #fff;
                 }
             }
-
             a{
+                color: #fff;
                 display: inline-block;
                 padding: 0 10px;
 
@@ -48,18 +63,5 @@
 
     a[href="#home"]{
         display: none;
-    }
-}
-body.home{
-    .content-info{
-        background-color: @brand-primary;
-        color: #fff;
-
-        .menu li +li:before{
-            color: #fff;
-        }
-        a{
-            color: #fff;
-        }
     }
 }

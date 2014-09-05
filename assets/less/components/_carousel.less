@@ -1,3 +1,35 @@
+body.single-product{
+    .carousel{
+        padding: 0 170px;
+        .carousel-inner{
+            > .item > img,
+            > .item > a > img{
+                margin: 0 auto;
+            }
+        }
+        .carousel-control{
+            background: none;
+
+            >span{
+                background-color: @brand-primary;
+                padding: 11px;
+                .size(50px, 50px);
+            }
+        }
+    }
+}
+
+.modal-dialog{
+    .carousel-control{
+        background: none;
+
+        >span{
+            background-color: @brand-primary;
+            padding: 11px;
+            .size(50px, 50px);
+        }
+    }
+}
 .carousel.carousel-fade{
     .item {
         opacity: 0;

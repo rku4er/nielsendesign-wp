@@ -1,4 +1,4 @@
-<header id="navbar" class="navbar-menu navbar navbar-default navbar-static-top" role="banner">
+<header id="navbar" class="navbar-menu navbar navbar-default navbar-fixed-top" role="banner">
   <div class="container">
 
     <div class="navbar-header">
@@ -9,7 +9,9 @@
         <span class="icon-bar"></span>
       </button>
 
-      <a href="<?php echo get_bloginfo('url'); ?>" class="navbar-brand"><span class="glyphicon glyphicon-home"></span>Home</a>
+      <span class="menu-item" data-menuanchor="home">
+        <a href="<?php echo get_bloginfo('url'); ?>" class="navbar-brand"><span class="glyphicon glyphicon-home"></span>Home</a>
+      </span>
     </div>
 
     <nav class="collapse navbar-collapse" role="navigation">

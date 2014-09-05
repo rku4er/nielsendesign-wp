@@ -35,11 +35,53 @@ function roots_wrap_base_cpts($templates) {
 }
 
 /**
+ * Remove image attributes
+ */
+add_filter( 'post_thumbnail_html', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'image_send_to_editor', 'remove_thumbnail_dimensions', 10 );
+add_filter( 'the_content', 'remove_thumbnail_dimensions', 10 );
+
+function remove_thumbnail_dimensions( $html ) {
+    $html = preg_replace( '/(width|height)=\"\d*\"\s/', "", $html );
+    return $html;
+}
+
+/** Register the html5 figure-non-responsive code fix. */
+add_filter( 'img_caption_shortcode', 'myfix_img_caption_shortcode_filter', 10, 3 );
+
+function myfix_img_caption_shortcode_filter($dummy, $attr, $content) {
+  $atts = shortcode_atts( array(
+      'id'      => '',
+      'align'   => 'alignnone',
+      'width'   => '',
+      'caption' => '',
+      'class'   => '',
+  ), $attr, 'caption' );
+
+  $atts['width'] = (int) $atts['width'];
+  if ( $atts['width'] < 1 || empty( $atts['caption'] ) )
+      return $content;
+
+  if ( ! empty( $atts['id'] ) )
+      $atts['id'] = 'id="' . esc_attr( $atts['id'] ) . '" ';
+
+  $class = trim( 'wp-caption ' . $atts['align'] . ' ' . $atts['class'] );
+
+  if ( current_theme_supports( 'html5', 'caption' ) ) {
+      return '<figure ' . $atts['id'] . 'style="max-width: ' . (int) $atts['width'] . 'px;" class="' . esc_attr( $class ) . '">'
+      . do_shortcode( $content ) . '<figcaption class="wp-caption-text">' . $atts['caption'] . '</figcaption></figure>';
+  }
+
+  // Return nothing to allow for default behaviour!!!
+  return '';
+}
+
+/**
  * Home slider shortcode
  */
 function home_slider_func($atts, $content = null) {
     $atts = shortcode_atts(array(
-      'timeout' => '5000'
+      'timeout' => '0'
     ), $atts);
 
     $output = '';
@@ -60,7 +102,7 @@ function home_slider_func($atts, $content = null) {
 
           $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'full', false);
 
-          $output .= '<div class="item '. $active .'">';
+          $output .= '<div class="item '. $active .'" style="background-image: url('. $img_src[0] .')">';
 
           $target = get_sub_field('new_window') ? 'target="_blank"' : '';
 
@@ -68,7 +110,7 @@ function home_slider_func($atts, $content = null) {
             $output .= '<a href="'. get_sub_field('url') .'" '. $target .'>';
           }
 
-          $output .= '<img src="'. $img_src[0].'" alt="">';
+          $output .= '<img src="'. $img_src[0] .'" alt="">';
 
           if(get_sub_field('url')){
             $output .= '</a>';
@@ -109,7 +151,7 @@ function crew_tiles_func($atts, $content = null) {
           the_row();
           $i++;
 
-          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'full', false);
+          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'showcase-tile', false);
 
           $output .= '<div class="item" style="background-image: url('. $img_src[0] .')">';
 
@@ -145,7 +187,11 @@ function crew_tiles_func($atts, $content = null) {
 
       $output .= '</div>';
 
+      $output .= '<div class="container">';
+
       $output .= '<div class="persons">';
+
+      $output .= '</div>';
 
       $output .= '</div>';
 
@@ -179,7 +225,7 @@ function creation_tiles_func($atts, $content = null) {
           the_row();
           $i++;
 
-          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'full', false);
+          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'showcase-tile', false);
 
           $output .= '<div class="item" style="background-image: url('. $img_src[0] .')">';
 
@@ -264,13 +310,14 @@ add_shortcode('creation_bottles', 'creation_bottles_func');
  */
 function recognition_carousel_func($atts, $content = null) {
     $atts = shortcode_atts(array(
-      'timeout' => '5000',
+      'timeout' => '0',
       'items_in_row' => '4'
     ), $atts);
 
     $output = '';
 
     if(have_rows('carousel')){
+
 
       $output .= '<section id="recognition-carousel" class="carousel carousel-slide" data-ride="carousel" data-interval="'. $atts['timeout'] .'">';
 
@@ -336,7 +383,7 @@ add_shortcode('recognition_carousel', 'recognition_carousel_func');
  */
 function recognition_testimonials_func($atts, $content = null) {
     $atts = shortcode_atts(array(
-      'timeout' => '5000'
+      'timeout' => '0'
     ), $atts);
 
     $output = '';
@@ -344,6 +391,8 @@ function recognition_testimonials_func($atts, $content = null) {
     if(have_rows('testimonials')){
 
       $output .= '<section id="recognition-testimonials" class="carousel carousel-slide carousel-fade" data-ride="carousel" data-interval="'. $atts['timeout'] .'">';
+
+      $output .= '<div class="container">';
 
       $output .= '<span class="icon icon-quote-left"></span>';
 
@@ -373,6 +422,8 @@ function recognition_testimonials_func($atts, $content = null) {
       $output .= '</div>';
 
       $output .= '<span class="icon icon-quote-right"></span>';
+
+      $output .= '</div>';
 
       $output .= '</section>';
 
@@ -529,7 +580,11 @@ function show_tiles_gallery_func($atts, $content = null) {
 
           $js_array = json_encode($arrayItems);
 
-          $output .= '<div id="tile-grid-'. $page .'" class="tile-grid" data-ids-array="'. $js_array .'">';
+          $templateSource = get_sub_field('template');
+          $templateArray = explode("<br />\r\n", $templateSource);
+          $js_templateArray = json_encode($templateArray);
+
+          $output .= '<div id="tile-grid-'. $page .'" class="tile-grid" data-template=\''. $js_templateArray .'\' data-ids-array="'. $js_array .'" style="padding-bottom:'. get_sub_field('height') .'">';
 
           if($page == 1){
             $output .= '<div class="tile">';
@@ -545,7 +600,7 @@ function show_tiles_gallery_func($atts, $content = null) {
 
             $output .= '<div class="tile" style="background-image: url('. $imgSrc[0] .')">';
             $output .= '<img src="'. $imgSrc[0] .'" alt="" class="img-responsive">';
-            $output .= '<h3><a data-target="#modal-'. $post->ID .'" data-id="'. $post->ID .'" rel="gallery-1" href="#modal-'. $post->ID .'" class="caption"><span>'. get_the_title($post->ID) .'</span></a></h3>';
+            $output .= '<h3><a data-target="#modal-'. $post->ID .'" data-id="'. $post->ID .'" rel="gallery-1" href="'. get_the_permalink($post->ID) .'" class="caption"><span>'. get_the_title($post->ID) .'</span></a></h3>';
             $output .= '</div>';
 
           }
@@ -577,3 +632,33 @@ function show_tiles_gallery_func($atts, $content = null) {
 }
 
 add_shortcode('tiles_gallery', 'show_tiles_gallery_func');
+
+function container_open_func($atts, $content = null) {
+  return '<div class="container">';
+}
+add_shortcode('container_open', 'container_open_func');
+
+function container_close_func($atts, $content = null) {
+  return '</div>';
+}
+add_shortcode('container_close', 'container_close_func');
+
+function row_open_func($atts, $content = null) {
+  return '<div class="row">';
+}
+add_shortcode('row_open', 'row_open_func');
+
+function row_close_func($atts, $content = null) {
+  return '</div>';
+}
+add_shortcode('row_close', 'row_close_func');
+
+function column_open_func($atts, $content = null) {
+  return '<div class="col-md-6">';
+}
+add_shortcode('column_open', 'column_open_func');
+
+function column_close_func($atts, $content = null) {
+  return '</div>';
+}
+add_shortcode('column_close', 'column_close_func');
