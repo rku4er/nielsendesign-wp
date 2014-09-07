@@ -266,6 +266,18 @@ function initProductsModal(selector){
   });
 }
 
+function resizeBanner(){
+  var slider = $('#home-slider');
+  if(slider.length){
+    var sliderOffset = slider.offset();
+    var sliderHeight = $(window).height() - $('#navbar').height() - sliderOffset.top;
+
+    slider.css({
+      'height' : Math.round(sliderHeight) + 'px'
+    });
+  }
+}
+
 function panelShowCallback(target){
   var $this = $(target);
   var id = target.id.replace(/panel-/g, '');
@@ -275,14 +287,7 @@ function panelShowCallback(target){
   }
 
   if(id === 'home'){
-    var slider = $('#home-slider');
-    if(slider.length){
-      var sliderOffset = slider.offset();
-      var sliderHeight = $(window).height() - $('#navbar').height() - sliderOffset.top;
-      slider.css({
-        'height' : Math.round(sliderHeight) + 'px'
-      });
-    }
+    resizeBanner();
   }
 
   if(!$('body').data(id + '-shown')){
@@ -290,7 +295,7 @@ function panelShowCallback(target){
     $('body').data(id + '-shown', true);
   }
 
-  window.location.hash = '#' + target.id;
+  replaceHash(target.id);
 }
 
 function panelFitScreen(){
@@ -301,6 +306,29 @@ function panelFitScreen(){
       'min-height' : $.waypoints('viewportHeight')
     });
   });
+  resizeBanner();
+}
+
+function replaceHash(hash){
+  //hash = hash.replace( /^#/, '' );
+  var fx, node = $( '#' + hash );
+  if ( node.length ) {
+    node.attr( 'id', '' );
+    fx = $( '<div></div>' )
+      .css({
+          position:'absolute',
+          visibility:'hidden',
+          top: $(document).scrollTop() + 'px'
+      })
+      .attr( 'id', hash )
+      .appendTo( document.body );
+  }
+
+  document.location.hash = hash;
+  if ( node.length ) {
+    fx.remove();
+    node.attr( 'id', hash );
+  }
 }
 
 
@@ -338,7 +366,7 @@ var Roots = {
     init: function() {
 
       // set menu hash
-      var templatePath = $('body').data('template-path');
+      //var templatePath = $('body').data('template-path');
 
       $('#mainnav').find('ul.navbar-nav li a').each(function(){
         var re = /\w*-?\w*(?=\/$)/gi;
@@ -347,18 +375,17 @@ var Roots = {
         $(this).attr('href', '#panel-' + hash);
       });
 
-      // Define scroll element
-      var $scrollElement;
-
       /* Smooth scrolling of links between panels */
-      $('.panel').each(function() {
+      $('.panel').each(function(i) {
         var $panel = $(this);
         var hash = '#' + this.id;
 
         $('a[href="' + hash + '"]').click(function(event){
+          $('body').data('animated', true);
           $('html, body').stop().animate({
             scrollTop: $panel.offset().top
           }, 500, 'easeOutExpo', function() {
+            $('body').remiveData('animated');
             window.location.hash = hash;
           });
 
@@ -369,25 +396,31 @@ var Roots = {
       /* Panel classes */
       $('.panel')
         .waypoint(function(direction) {
-          //$('body').toggleClass(this.id + '-visible', direction === 'down');
+          $('body').toggleClass(this.id + '-visible', direction === 'down');
           $(this).toggleClass('visible', direction === 'down');
           $('a[href="#' + this.id + '"]').parent().toggleClass('active', direction === 'down');
           panelShowCallback(this);
+          if(direction === 'down' && !$('body').data('animated')){
+            replaceHash(this.id);
+          }
         }, {
-          offset: '50%'
+          offset: '49%'
         })
         .waypoint(function(direction) {
-          //$('body').toggleClass(this.id + '-visible', direction === 'up');
+          $('body').toggleClass(this.id + '-visible', direction === 'up');
           $(this).toggleClass('visible', direction === 'up');
           $('a[href="#' + this.id + '"]').parent().toggleClass('active', direction === 'up');
+          if(direction === 'up' && !$('body').data('animated')){
+            replaceHash(this.id);
+          }
         }, {
           offset: function() {
-            return -$(this).outerHeight();
+            return $.waypoints('viewportHeight') / 2 - $(this).outerHeight();
           }
         });
 
       /* Show/hide menu */
-      $('.content-info')
+      $('.wrap')
         .waypoint(function(direction) {
           $('#mainnav').toggleClass('hidden', direction === 'down');
         }, {
