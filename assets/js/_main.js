@@ -126,7 +126,7 @@ function toggleBounce(marker) {
 
 function showGmaps(selector){
   // Google Maps
-  if(typeof google.maps !== "undefined"){
+  if(typeof google !== "undefined"){
 
     var mapHolder = $(selector);
     var myLatlng = new google.maps.LatLng(mapHolder.data('latitude'), mapHolder.data('longitude'));
@@ -270,7 +270,7 @@ function resizeBanner(){
   var slider = $('#home-slider');
   if(slider.length){
     var sliderOffset = slider.offset();
-    var sliderHeight = $(window).height() - $('#navbar').height() - sliderOffset.top;
+    var sliderHeight = $.waypoints('viewportHeight') - $('#mainnav').outerHeight() - sliderOffset.top;
 
     slider.css({
       'height' : Math.round(sliderHeight) + 'px'
@@ -302,9 +302,21 @@ function panelFitScreen(){
   $('.panel').each(function(){
     var self = $(this);
     self.css({
-      'padding-top' : $('#navbar').outerHeight(),
+      'padding-top' : $('#navbar').outerHeight() + $('.navbar-brand').outerHeight(),
       'min-height' : $.waypoints('viewportHeight')
     });
+  });
+  resizeBanner();
+}
+
+function pageFitScreen(){
+  $('.main').css({
+    'padding-top' : $('#navbar').outerHeight() + $('.navbar-brand').outerHeight(),
+    'padding-bottom' : $('#mainnav').outerHeight() + $('.content-info').outerHeight()
+  });
+
+  $('#mainnav').css({
+    'margin-bottom' : $('.content-info').outerHeight()
   });
   resizeBanner();
 }
@@ -349,6 +361,8 @@ var Roots = {
       // creation bottles animation
       if(!$('body.home').length){
         initCreationBottles('#creation-bottles');
+
+        $(window).load(pageFitScreen).resize(pageFitScreen);
       }
 
       // google maps
@@ -359,6 +373,7 @@ var Roots = {
 
       // lightbox for 'view all products' link
       initProductsModal('a[rel=gallery-2]');
+
     }
   },
   // Home page
@@ -384,7 +399,7 @@ var Roots = {
           $('body').data('animated', true);
           $('html, body').stop().animate({
             scrollTop: $panel.offset().top
-          }, 500, 'easeOutExpo', function() {
+          }, 1000, 'easeOutExpo', function() {
             $('body').remiveData('animated');
             window.location.hash = hash;
           });
@@ -442,7 +457,7 @@ var Roots = {
       });
 
       /* Fit panel size equal to screen  */
-      $(window).load(panelFitScreen).resize(panelFitScreen);
+      $(window).resize(panelFitScreen);
 
       $(window).load(function(){
         $(this).trigger('resize');

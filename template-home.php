@@ -6,10 +6,6 @@ Template Name: Home
 
 <div class="panel" id="panel-home">
     <div class="inner">
-        <div class="container">
-            <h1 class="brand-name"><?php echo get_bloginfo('name'); ?></h1>
-            <p class="brand-description"><?php echo get_bloginfo('description'); ?></p>
-        </div>
         <?php while (have_posts()) : the_post(); ?>
             <?php get_template_part('templates/content', 'page'); ?>
         <?php endwhile; ?>

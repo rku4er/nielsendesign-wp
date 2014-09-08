@@ -1,3 +1,220 @@
-.navbar{
+.navbar-contacts{
+    background-color: #FFF;
+    border-color: lighten(@brand-primary, 40);
     margin-bottom: 0;
+
+    .navbar-brand{
+        margin: 1px 0 0 0 !important;
+        padding: 15px 0;
+        float: none;
+        height: auto;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-image: url("../img/bg/noise.png");
+
+        .brand-name{
+            display: block;
+            margin-top: 0;
+            margin-bottom: 11px;
+            font-size: 41px;
+            font-weight: normal;
+            line-height: 1.1;
+        }
+        .brand-description{
+            margin-bottom: 0;
+        }
+
+        a{
+            text-decoration: none;
+        }
+    }
+
+    .navbar-nav{
+        margin-top: 0;
+        margin-bottom: 0;
+
+        >li{
+            float: none;
+            display: inline-block;
+            vertical-align: top;
+
+            .navbar-text{
+                margin: 0;
+            }
+
+            .navbar-text,
+            > a{
+                padding: 10px 15px;
+
+                @media (min-width: @screen-sm-min){
+                    padding: 14px 15px;
+                }
+            }
+
+            >a{
+                color: @brand-primary;
+
+                &:hover,
+                &:focus{
+                    color: darken(@brand-primary, 10%);
+                }
+            }
+
+            .icon{
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .navbar-text{
+        display: inline-block;
+        color: @brand-primary;
+
+        .icon{
+            font-size: 1.3em;
+        }
+    }
+}
+
+.navbar-menu{
+    background-color: #fff;
+    border-color: transparent;
+
+    @media (max-width: @screen-xs-max){
+        background-color: transparent;
+        bottom: auto;
+        top: 90px;
+    }
+
+    .navbar-nav{
+        float: none;
+        margin: 0 -15px;
+
+        @media (min-width: @screen-sm-min){
+            text-align: center;
+        }
+
+        >li{
+            float: none;
+            display: inline-block;
+            width: 100%;
+
+            &.active{
+                background-image: url("../img/bg/noise.png");
+            }
+
+            @media (min-width: @screen-sm-min){
+                width: auto;
+            }
+
+            @media (min-width: @screen-md-min){
+                margin: 0 1%;
+            }
+
+            @media (min-width: @screen-lg-min){
+                margin: 0 2%;
+            }
+
+            > a{
+                text-align: left;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                padding-left: 80px;
+
+                @media (min-width: @screen-sm-min){
+
+                    padding: 10px 15px;
+                    text-align: center;
+                }
+            }
+
+            .icon{
+                display: block;
+                font-size: 1.6em;
+                margin-bottom: 3px;
+                text-align: center;
+                width: 50px;
+                position: absolute;
+                left: 15px;
+                top: 0.5em;
+
+                @media (min-width: @screen-sm-min){
+                    position: static;
+                    margin-right: 0;
+                    font-size: 2em;
+                    width: auto;
+                }
+
+                @media (min-width: @screen-md-min){
+                    font-size: 3em;
+                }
+            }
+        }
+    }
+
+    .navbar-collapse{
+        max-height: none;
+    }
+
+    @media (max-width: @screen-xs-max){
+        .navbar-collapse{
+            background-color: #FFF;
+            float: right;
+            width: 50%;
+            min-width: 240px;
+            border-top-color: @brand-primary;
+
+            .box-shadow(0px 3px 5px rgba(0,0,0,0.3));
+        }
+    }
+}
+
+.search-form{
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border: 0 none;
+    margin-top: 3px;
+    margin-bottom: 3px;
+
+    @media (max-width: @screen-xs-max){
+        margin: 0 400px 0 0;
+        display: block;
+    }
+
+    .form-group{
+        position: relative;
+        margin-bottom: 0;
+
+        .form-control{
+            background-color: transparent;
+            opacity: 0;
+            width: 0;
+            display: block;
+            position: relative;
+            z-index: 1;
+            padding-right: 15px;
+            cursor: pointer;
+
+            .transition(all .2s ease);
+
+            &:focus{
+                padding-right: 30px;
+                opacity: 1;
+                width: 200px;
+                cursor: text;
+            }
+        }
+        .btn{
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            border: 0 none;
+            padding: 0;
+            margin: 1px;
+            color: @brand-primary;
+        }
+    }
 }

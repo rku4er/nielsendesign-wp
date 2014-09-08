@@ -1,5 +1,5 @@
 <?php if(have_rows('contacts', 'options')): ?>
-<nav id="navbar" class="navbar-contacts navbar navbar-default navbar-fixed-top">
+<nav id="navbar" class="navbar-contacts navbar navbar-default navbar-fixed-top" role="banner">
     <div class="container">
         <ul class="nav navbar-nav navbar-right">
         <?php while(have_rows('contacts', 'options')): the_row(); ?>
@@ -28,6 +28,20 @@
             </li>
         </ul>
     </div>
+    <div class="navbar-brand">
+        <div class="container">
+            <?php if(is_front_page()): ?>
+            <h1 class="brand-name">
+                <a href="#panel-home"><?php echo get_bloginfo('name'); ?></a>
+            </h1>
+            <?php else: ?>
+            <strong class="brand-name">
+                <a href="<?php echo get_bloginfo('url'); ?>"><?php echo get_bloginfo('name'); ?></a>
+            </strong>
+            <?php endif; ?>
+            <p class="brand-description"><?php echo get_bloginfo('description'); ?></p>
+        </div>
+    </div>
 </nav>
 <?php endif; ?>
 
@@ -41,8 +55,6 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-
-      <a href="<?php echo get_bloginfo('url'); ?>" class="navbar-brand"><span class="glyphicon glyphicon-home"></span>Home</a>
     </div>
 
     <nav class="collapse navbar-collapse" role="navigation">
