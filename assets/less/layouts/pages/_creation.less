@@ -59,6 +59,41 @@
 }
 
 #creation-tiles{
+    margin-top: -100px;
+    padding: 100px 0 220px;
+    background-image: url("../img/bg/noise.png");
+    position: relative;
+    z-index: 2;
+
+    &:before{
+        content: "";
+        z-index: -1;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 220px;
+        left: 0;
+
+        .gradient(rgba(0,0,0,0.1), rgba(255,255,255,0), vertical);
+    }
+
+    .tiles-inner{
+        position: relative;
+        z-index: 2;
+
+        &:before{
+            content: "";
+            z-index: -1;
+            position: absolute;
+            right: 0;
+            bottom: 100%;
+            height: 100px;
+            left: 0;
+
+            .gradient(rgba(0,0,0,0.08), rgba(255,255,255,0), vertical);
+        }
+    }
+
     .overlay{
         .transition(opacity .3s ease);
 

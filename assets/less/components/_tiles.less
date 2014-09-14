@@ -18,6 +18,7 @@
             float: left;
             height: 0;
             padding-bottom: 50%;
+            position: relative;
 
             @media (max-width: @screen-sm-max){
                 &:nth-child(2n+1):last-child{
@@ -33,10 +34,6 @@
                 height: auto;
                 padding-bottom: 0;
             }
-            position: relative;
-
-            background-repeat: no-repeat;
-            background-size: cover;
 
             &,
             & a{
@@ -45,6 +42,32 @@
 
             img{
                 visibility: hidden;
+            }
+
+            &:before{
+                content: "";
+                .desaturate();
+            }
+
+            &:hover,
+            &:focus{
+                .background{
+                    .desaturate();
+                }
+                .overlay{
+                    opacity: 1;
+                }
+            }
+
+            .background{
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 1;
+                background-repeat: no-repeat;
+                background-size: cover;
             }
 
             .overlay{
@@ -59,12 +82,7 @@
                 overflow: hidden;
 
                 @media (min-width: @screen-sm-min){
-                    padding: 10px;
-                }
-
-                &:hover,
-                &:focus{
-                    opacity: 1;
+                    padding: 10px 30px;
                 }
 
                 &:before{

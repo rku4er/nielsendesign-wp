@@ -108,12 +108,16 @@ function home_slider_func($atts, $content = null) {
 
           if(get_sub_field('url')){
             $output .= '<a href="'. get_sub_field('url') .'" '. $target .'>';
+          }else{
+            $output .= '<span>';
           }
 
           $output .= '<img src="'. $img_src[0] .'" alt="">';
 
           if(get_sub_field('url')){
             $output .= '</a>';
+          }else{
+            $output .= '</span>';
           }
 
           $output .= '</div>';
@@ -151,9 +155,9 @@ function crew_tiles_func($atts, $content = null) {
           the_row();
           $i++;
 
-          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'showcase-tile', false);
+          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'inline-tile', false);
 
-          $output .= '<div class="item" style="background-image: url('. $img_src[0] .')">';
+          $output .= '<div class="item">';
 
           $target = get_sub_field('new_window') ? 'target="_blank"' : '';
 
@@ -162,6 +166,8 @@ function crew_tiles_func($atts, $content = null) {
           }
 
           $output .= '<img src="'. $img_src[0] .'" alt="'. get_sub_field('title') .'" class="img-responsive">';
+
+          $output .= '<span class="background" style="background-image: url('. $img_src[0] .')"></span>';
 
           $output .= '<span class="overlay">';
 
@@ -225,9 +231,9 @@ function creation_tiles_func($atts, $content = null) {
           the_row();
           $i++;
 
-          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'showcase-tile', false);
+          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'inline-tile', false);
 
-          $output .= '<div class="item" style="background-image: url('. $img_src[0] .')">';
+          $output .= '<div class="item">';
 
           $target = get_sub_field('new_window') ? 'target="_blank"' : '';
 
@@ -236,6 +242,8 @@ function creation_tiles_func($atts, $content = null) {
           }
 
           $output .= '<img src="'. $img_src[0] .'" alt="'. get_sub_field('title') .'" class="img-responsive">';
+
+          $output .= '<span class="background" style="background-image: url('. $img_src[0] .')"></span>';
 
           $output .= '<span class="overlay">';
 

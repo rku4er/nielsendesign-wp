@@ -55,7 +55,7 @@ function initCrewPersons(holder){
 function initCreationBottles(holder){
   var creationBottles = $(holder).find('.item');
 
-  if(creationBottles.length){
+  if(creationBottles.length && !$('body').data('creation_bottles_loaded')){
     creationBottles.each(function(i){
       i++;
       var range = $(this).find('.range');
@@ -266,61 +266,57 @@ function initProductsModal(selector){
   });
 }
 
-function resizeBanner(){
+function resizeBanner(top){
   var slider = $('#home-slider');
   if(slider.length){
-    setTimeout(function(){
-      var sliderOffset = slider.offset();
-      var sliderHeight = $.waypoints('viewportHeight') - $('#mainnav').outerHeight() - sliderOffset.top;
+    var sliderOffset = slider.offset();
+    var sliderHeight = $.waypoints('viewportHeight') - $('#mainnav').outerHeight() - top;
 
-      slider.css({
-        'height' : Math.round(sliderHeight) + 'px'
-      });
-    }, 50);
+    slider.css({
+      'height' : Math.round(sliderHeight) + 'px'
+    });
   }
 }
 
 function panelShowCallback(target){
-  var $this = $(target);
-  var id = target.id.replace(/panel-/g, '');
+  $(target)
+    .each(function(){
+      var id = this.id.replace(/panel-/g, '');
 
-  if(id === 'creation' && !$('body').data('creation_bottles_loaded')){
-    initCreationBottles('#creation-bottles');
-  }
+      if(id === 'creation'){
+        initCreationBottles('#creation-bottles');
+      }
 
-  if(id === 'home'){
-    resizeBanner();
-  }
-
-  if(!$('body').data(id + '-shown')){
-    $this.addClass('animated');
-    $('body').data(id + '-shown', true);
-  }
-
-  replaceHash(target.id);
-}
-
-function panelFitScreen(){
-  $('.panel').each(function(){
-    var self = $(this);
-    self.css({
-      'padding-top' : $('#navbar').outerHeight() + $('.navbar-brand').outerHeight(),
-      'min-height' : $.waypoints('viewportHeight')
+      if(!$('body').data(id + '-shown')){
+        $(this).addClass('animated');
+        $('body').data(id + '-shown', true);
+      }
     });
-  });
-  resizeBanner();
 }
 
-function pageFitScreen(){
-  $('.main').css({
-    'padding-top' : $('#navbar').outerHeight() + $('.navbar-brand').outerHeight(),
-    'padding-bottom' : $('#mainnav').outerHeight() + $('.content-info').outerHeight()
-  });
+function fitScreen(el){
+  var top = $('#navbar').outerHeight() + $('.navbar-brand').outerHeight();
 
-  $('#mainnav').css({
-    'margin-bottom' : $('.content-info').outerHeight()
-  });
-  resizeBanner();
+  if(el === 'panel'){
+    $('.panel').each(function(){
+      var self = $(this);
+      self.css({
+        'padding-top' : top,
+        'min-height' : $.waypoints('viewportHeight')
+      });
+    });
+  }else if(el === 'page'){
+    $('.main').css({
+      'padding-top' : top,
+      'padding-bottom' : $('#mainnav').outerHeight() + $('.content-info').outerHeight()
+    });
+
+    $('#mainnav').css({
+      'margin-bottom' : $('.content-info').outerHeight()
+    });
+  }
+
+  resizeBanner(top);
 }
 
 function replaceHash(hash){
@@ -345,6 +341,78 @@ function replaceHash(hash){
   }
 }
 
+function initWaypoints(){
+
+  $('.panel')
+    .waypoint(function(direction) {
+      $('body').toggleClass(this.id + '-visible', direction === 'down');
+      $(this).toggleClass('visible', direction === 'down');
+      $('a[href="#' + this.id + '"]').parent().toggleClass('active', direction === 'down');
+
+      if($(window).width() > 480){
+        panelShowCallback(this);
+      }
+      if(direction === 'down' && !$('body').data('animated')){
+        if($(window).width() > 480){
+          replaceHash(this.id);
+        }
+      }
+    }, {
+      offset: '49%'
+    })
+    .waypoint(function(direction) {
+      $('body').toggleClass(this.id + '-visible', direction === 'up');
+      $(this).toggleClass('visible', direction === 'up');
+      $('a[href="#' + this.id + '"]').parent().toggleClass('active', direction === 'up');
+
+      if(direction === 'up' && !$('body').data('animated')){
+        if($(window).width() > 480){
+          replaceHash(this.id);
+        }
+      }
+    }, {
+      offset: function() {
+        return $.waypoints('viewportHeight') / 2 - $(this).outerHeight();
+      }
+    });
+
+  /* Show/hide menu */
+  $('.wrap')
+    .waypoint(function(direction) {
+      $('#mainnav').toggleClass('hidden', direction === 'down');
+    }, {
+      offset: 'bottom-in-view'
+    });
+}
+
+function prepareNav(selector){
+  $(selector).find('ul.navbar-nav li a').each(function(){
+    var re = /\w*-?\w*(?=\/$)/gi;
+    var hash = $(this).attr('href').match(re)[0];
+
+    $(this).attr('href', '#panel-' + hash);
+  });
+}
+
+function smoothScroll(selector){
+  $(selector).each(function(i) {
+    var $panel = $(this);
+    var hash = '#' + this.id;
+
+    $('a[href="' + hash + '"]').click(function(event){
+      $('body').data('animated', true);
+
+      $('html, body').stop().animate({
+        scrollTop: $panel.offset().top
+      }, 1000, 'easeOutExpo', function() {
+        $('body').removeData('animated');
+        window.location.hash = hash;
+      });
+
+      event.preventDefault();
+    });
+  });
+}
 
 // Use this variable to set up the common and page specific functions. If you
 // rename this variable, you will also need to rename the namespace below.
@@ -360,11 +428,17 @@ var Roots = {
       // crew persons highlight
       initCrewPersons('#crew-tiles');
 
-      // creation bottles animation
       if(!$('body.home').length){
+        // creation bottles animation
         initCreationBottles('#creation-bottles');
 
-        $(window).load(pageFitScreen).resize(pageFitScreen);
+        $(window)
+          .resize(function(){
+            fitScreen('page');
+          })
+          .load(function(){
+            $(this).trigger('resize');
+          });
       }
 
       // google maps
@@ -383,112 +457,38 @@ var Roots = {
     init: function() {
       //var templatePath = $('body').data('template-path');
 
-      if($(window).width() <= 480){
-        $('.panel').each(function(){
-          var $this = $(this);
-          var id = this.id.replace(/panel-/g, '');
+      prepareNav('#mainnav');
 
-          if(id === 'creation' && !$('body').data('creation_bottles_loaded')){
-            initCreationBottles('#creation-bottles');
-          }
-
-          if(id === 'home'){
-            resizeBanner();
-          }
-
-          if(!$('body').data(id + '-shown')){
-            $this.addClass('animated');
-            $('body').data(id + '-shown', true);
-          }
-        });
-      }
-
-      $('#mainnav').find('ul.navbar-nav li a').each(function(){
-        var re = /\w*-?\w*(?=\/$)/gi;
-        var hash = $(this).attr('href').match(re)[0];
-
-        $(this).attr('href', '#panel-' + hash);
-      });
-
-      /* Smooth scrolling of links between panels */
-      $('.panel').each(function(i) {
-        var $panel = $(this);
-        var hash = '#' + this.id;
-
-        $('a[href="' + hash + '"]').click(function(event){
-          $('body').data('animated', true);
-          $('html, body').stop().animate({
-            scrollTop: $panel.offset().top
-          }, 1000, 'easeOutExpo', function() {
-            $('body').removeData('animated');
-            window.location.hash = hash;
-          });
-
-          event.preventDefault();
-        });
-      });
-
-      /* Panel classes */
-      $('.panel')
-        .waypoint(function(direction) {
-          $('body').toggleClass(this.id + '-visible', direction === 'down');
-          $(this).toggleClass('visible', direction === 'down');
-          $('a[href="#' + this.id + '"]').parent().toggleClass('active', direction === 'down');
-
-          if($(window).width() > 480){
-            panelShowCallback(this);
-          }
-          if(direction === 'down' && !$('body').data('animated')){
-            if($(window).width() > 480){
-              replaceHash(this.id);
-            }
-          }
-        }, {
-          offset: '49%'
-        })
-        .waypoint(function(direction) {
-          $('body').toggleClass(this.id + '-visible', direction === 'up');
-          $(this).toggleClass('visible', direction === 'up');
-          $('a[href="#' + this.id + '"]').parent().toggleClass('active', direction === 'up');
-          if(direction === 'up' && !$('body').data('animated')){
-            if($(window).width() > 480){
-              replaceHash(this.id);
-            }
-          }
-        }, {
-          offset: function() {
-            return $.waypoints('viewportHeight') / 2 - $(this).outerHeight();
-          }
-        });
-
-      /* Show/hide menu */
-      $('.wrap')
-        .waypoint(function(direction) {
-          $('#mainnav').toggleClass('hidden', direction === 'down');
-        }, {
-          offset: 'bottom-in-view'
-        });
+      smoothScroll('.panel');
 
       /* Force snap to panel on resize. */
       var timer;
+      $(window)
+        .resize(function() {
+          fitScreen('panel');
 
-      $(window).resize(function() {
-        window.clearTimeout(timer);
-        timer = window.setTimeout(function() {
-          var hash = window.location.hash ? window.location.hash : '#panel-home';
+          window.clearTimeout(timer);
 
-          $('html, body').stop().animate({
-            scrollTop: $(hash).offset().top
-          }, 200);
-        }, 100);
-      });
+          timer = window.setTimeout(function() {
+            var hash = window.location.hash ? window.location.hash : '#panel-home';
 
-      /* Fit panel size equal to screen  */
-      $(window).resize(panelFitScreen);
+            $('body').data('animated', true);
 
-      $(window).load(function(){
-        $(this).trigger('resize');
-      });
+            $('html, body').stop().animate({
+              scrollTop: $(hash).offset().top
+            }, 1000, 'easeOutExpo', function() {
+              $('body').removeData('animated');
+            });
+
+          }, 100);
+        })
+        .load(function(){
+          $(this).trigger('resize');
+          if($(window).width() <= 480){
+            panelShowCallback('.panel');
+          }
+          initWaypoints();
+        });
     }
   }
 };

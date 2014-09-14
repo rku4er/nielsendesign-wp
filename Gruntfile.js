@@ -7,17 +7,17 @@ module.exports = function(grunt) {
 
   var jsFileList = [
     'assets/vendor/bootstrap/js/transition.js',
-    'assets/vendor/bootstrap/js/alert.js',
-    'assets/vendor/bootstrap/js/button.js',
+    //'assets/vendor/bootstrap/js/alert.js',
+    //'assets/vendor/bootstrap/js/button.js',
     'assets/vendor/bootstrap/js/carousel.js',
     'assets/vendor/bootstrap/js/collapse.js',
     'assets/vendor/bootstrap/js/dropdown.js',
     'assets/vendor/bootstrap/js/modal.js',
-    'assets/vendor/bootstrap/js/tooltip.js',
-    'assets/vendor/bootstrap/js/popover.js',
-    'assets/vendor/bootstrap/js/scrollspy.js',
-    'assets/vendor/bootstrap/js/tab.js',
-    'assets/vendor/bootstrap/js/affix.js',
+    //'assets/vendor/bootstrap/js/tooltip.js',
+    //'assets/vendor/bootstrap/js/popover.js',
+    //'assets/vendor/bootstrap/js/scrollspy.js',
+    //'assets/vendor/bootstrap/js/tab.js',
+    //'assets/vendor/bootstrap/js/affix.js',
     'assets/vendor/jquery.easing/jquery.easing.1.3.js',
     'assets/vendor/jquery-mousewheel/jquery.mousewheel.js',
     //'assets/vendor/Columnizer-jQuery-Plugin/src/jquery.columnizer.js',
@@ -57,7 +57,7 @@ module.exports = function(grunt) {
           // To enable, set sourceMap to true and update sourceMapRootpath based on your install
           sourceMap: true,
           sourceMapFilename: 'assets/css/main.css.map',
-          sourceMapRootpath: '/app/themes/roots/'
+          sourceMapRootpath: '/home/nblxtap/HTTPdocs/nielsendesign-wp/www/wp-content/themes/roots/'
         }
       },
       build: {
@@ -82,6 +82,10 @@ module.exports = function(grunt) {
     },
     uglify: {
       dist: {
+        options: {
+          sourceMap: true,
+          sourceMapName: 'assets/js/scripts.js.map'
+        },
         files: {
           'assets/js/scripts.min.js': [jsFileList]
         }

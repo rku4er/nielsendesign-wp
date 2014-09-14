@@ -56,7 +56,7 @@ function roots_scripts() {
 
   // Google maps API v3
   if (is_front_page() || is_page('contact') ){
-    wp_enqueue_script('gmaps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ1zeXL0klf-9NPfdZPIlPsYko6Q7k090&sensor=true', array(), null, false);
+    wp_enqueue_script('gmaps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBJ1zeXL0klf-9NPfdZPIlPsYko6Q7k090&sensor=true', array(), null, true);
   }
 
   wp_enqueue_script('modernizr', get_template_directory_uri() . $assets['modernizr'], array(), null, false);

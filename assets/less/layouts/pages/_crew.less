@@ -1,6 +1,25 @@
 #crew-tiles{
     margin-top: 50px;
 
+    .tiles-inner{
+        position: relative;
+        z-index: 2;
+
+        &:before{
+            content: "";
+            z-index: -1;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #F4F1F2;
+            margin: -20px -20px -40px;
+
+            .rotate(0.5deg);
+        }
+    }
+
     .overlay{
         .transition(opacity .3s ease);
 
@@ -41,6 +60,8 @@
         height: 0;
         padding-bottom: 40.8%;
         max-width: 100%;
+        position: relative;
+        z-index: 3;
 
         @media (min-width: @screen-md-min){
             max-width: 700px;
