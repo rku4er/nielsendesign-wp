@@ -107,6 +107,16 @@ module.exports = function(grunt) {
         src: 'assets/css/main.min.css'
       }
     },
+    imagemin: {
+      dynamic: {
+        files: [{
+          expand: true,
+          cwd: 'assets/img/',
+          src: ['**/*.{png,jpg,gif,svg}'],
+          dest: 'assets/img/'
+        }]
+      }
+    },
     modernizr: {
       build: {
         devFile: 'assets/vendor/modernizr/modernizr.js',
@@ -185,6 +195,7 @@ module.exports = function(grunt) {
     'autoprefixer:build',
     'uglify',
     'modernizr',
+    'imagemin',
     'version'
   ]);
 };
