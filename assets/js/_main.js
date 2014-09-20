@@ -298,11 +298,11 @@ function fitScreen(el){
   var top = $('#navbar').outerHeight() + $('.navbar-brand').outerHeight();
 
   if(el === 'panel'){
-    $('.panel').each(function(){
+    $('.panel').each(function(i){
       var self = $(this);
       self.css({
-        'padding-top' : top,
-        'min-height' : $.waypoints('viewportHeight')
+        'padding-top' : (i === 0) ? top : 0,
+        'min-height' : $.waypoints('viewportHeight') - top
       });
     });
   }else if(el === 'page'){
@@ -334,7 +334,7 @@ function replaceHash(hash){
       .appendTo( document.body );
   }
 
-  document.location.hash = hash;
+  window.location.hash = hash;
   if ( node.length ) {
     fx.remove();
     node.attr( 'id', hash );
@@ -397,19 +397,24 @@ function prepareNav(selector){
 function smoothScroll(selector){
   $(selector).each(function(i) {
     var $panel = $(this);
-    var hash = '#' + this.id;
+    var hash = this.id;
 
-    $('a[href="' + hash + '"]').click(function(event){
+    $('a[href="' + '#' + hash + '"]').on('click', function(event){
+
+      var offset = $panel.offset();
+      var top = Math.round(offset.top) - ($('#navbar').outerHeight() + $('.navbar-brand').outerHeight());
+
       $('body').data('animated', true);
 
       $('html, body').stop().animate({
-        scrollTop: $panel.offset().top
+        scrollTop: top
       }, 1000, 'easeOutExpo', function() {
+        replaceHash(hash);
         $('body').removeData('animated');
-        window.location.hash = hash;
       });
 
       event.preventDefault();
+
     });
   });
 }
@@ -471,23 +476,26 @@ var Roots = {
 
           timer = window.setTimeout(function() {
             var hash = window.location.hash ? window.location.hash : '#panel-home';
+            var $panel = $(hash);
+            var offset = $panel.offset();
+            var top = Math.round(offset.top) - ($('#navbar').outerHeight() + $('.navbar-brand').outerHeight());
 
             $('body').data('animated', true);
 
             $('html, body').stop().animate({
-              scrollTop: $(hash).offset().top
+              scrollTop: top
             }, 1000, 'easeOutExpo', function() {
               $('body').removeData('animated');
-            });
+          });
 
           }, 100);
         })
         .load(function(){
-          $(this).trigger('resize');
           if($(window).width() <= 480){
             panelShowCallback('.panel');
           }
           initWaypoints();
+          $(this).trigger('resize');
         });
     }
   }

@@ -26,7 +26,14 @@ function getProducts(){
 
     $output .= '<div class="modal-header">';
         $output .= '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>';
-        $output .= '<h4 class="modal-title" id="myModalLabel">Products</h4>';
+        //$output .= '<h4 class="modal-title" id="myModalLabel">Products</h4>';
+        $output .= '<a class="left carousel-control" href="#product-gallery" role="button" data-slide="prev">';
+        $output .= '<span class="glyphicon glyphicon-chevron-left"></span>';
+        $output .= '</a>';
+
+        $output .= '<a class="right carousel-control" href="#product-gallery" role="button" data-slide="next">';
+        $output .= '<span class="glyphicon glyphicon-chevron-right"></span>';
+        $output .= '</a>';
     $output .= '</div>';
 
     $output .= '<div class="modal-body">';
@@ -50,7 +57,7 @@ function getProducts(){
             $output .= '<h2 class="text-center">'. $post->post_title .'</h2> <br>';
 
             $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
-            $imgSrc = wp_get_attachment_image_src( $post_thumbnail_id, 'lightbox-products', false );
+            $imgSrc = wp_get_attachment_image_src( $post_thumbnail_id, 'full', false );
 
             $output .= '<img src="'. $imgSrc[0] .'" alt="">';
 
@@ -62,13 +69,7 @@ function getProducts(){
 
           $output .= '</div>';
 
-          $output .= '<a class="left carousel-control" href="#product-gallery" role="button" data-slide="prev">';
-          $output .= '<span class="glyphicon glyphicon-chevron-left"></span>';
-          $output .= '</a>';
-
-          $output .= '<a class="right carousel-control" href="#product-gallery" role="button" data-slide="next">';
-          $output .= '<span class="glyphicon glyphicon-chevron-right"></span>';
-          $output .= '</a>';
+          /* arrows */
 
           $output .= '</section>';
 

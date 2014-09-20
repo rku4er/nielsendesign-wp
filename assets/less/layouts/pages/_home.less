@@ -8,6 +8,7 @@ body.home{
         box-shadow: none;
         margin-bottom: 0;
         background-color: #fff;
+        padding-bottom: 200px;
 
         .inner{
             >.container{
@@ -141,19 +142,15 @@ body.home{
     }
 }
 
-#panel-home{
-    .brand-name{
-        color: @brand-primary;
-        font-size: 34px;
-        margin: 30px 0 0;
-    }
-    .brand-description{
-        font-size: 20px;
-        margin-bottom: 30px;
-    }
-}
-
 #panel-nielsen-design{
+    .container{
+        text-align: justify;
+
+        >p{
+            padding-right: 50%;
+        }
+    }
+
     .wp-caption{
         background-color: transparent;
         border: 0 none;
@@ -200,13 +197,22 @@ body.home{
 
         .gradient(rgba(0,0,0,0.03), rgba(255,255,255,0), horizontal);
     }
+
+    .brand-name{
+        color: @brand-primary;
+        font-size: 34px;
+        margin: 30px 0 0;
+    }
+    .brand-description{
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
 }
 #panel-nielsen-design{
     background-image: url("../img/bg/panel-nielsen-design.jpg");
     background-position: 50% 100%;
     background-size: 100% auto;
     background-repeat: no-repeat;
-    padding-bottom: 200px;
 }
 #panel-showcase{
     background-image: url("../img/bg/wall.jpg");
@@ -228,7 +234,6 @@ body.home{
     background-position: 50% 100%;
     background-size: 100% auto;
     background-repeat: no-repeat;
-    padding-bottom: 200px;
 
     >.inner{
         position: relative;
@@ -254,10 +259,10 @@ body.home{
     background-position: 50% 50%;
     background-size: cover;
     background-repeat: no-repeat;
+    padding-bottom: 0;
 }
 #panel-recognition{
     background-image: url("../img/bg/noise.png");
-    padding-bottom: 175px;
 
     >.inner{
         position: relative;
@@ -282,4 +287,5 @@ body.home{
     background-image: url("../img/bg/33bakery.png");
     background-repeat: no-repeat;
     background-position: 100% 0;
+    padding-bottom: 0;
 }

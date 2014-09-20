@@ -60,10 +60,14 @@
 
 #creation-tiles{
     margin-top: -100px;
-    padding: 100px 0 220px;
+    padding: 100px 0 0;
     background-image: url("../img/bg/noise.png");
     position: relative;
     z-index: 2;
+
+    @media (min-width: @screen-md-min){
+        padding-bottom: 220px;
+    }
 
     &:before{
         content: "";
@@ -91,6 +95,12 @@
             left: 0;
 
             .gradient(rgba(0,0,0,0.08), rgba(255,255,255,0), vertical);
+        }
+
+        .item{
+            @media (min-width: @screen-md-min){
+                width: 20%;
+            }
         }
     }
 

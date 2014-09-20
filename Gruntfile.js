@@ -5,6 +5,8 @@ module.exports = function(grunt) {
   // Show elapsed time
   require('time-grunt')(grunt);
 
+  var rootPath = '/home/nblxtap/HTTPdocs/nielsendesign-wp/www/wp-content/themes/roots/';
+
   var jsFileList = [
     'assets/vendor/bootstrap/js/transition.js',
     //'assets/vendor/bootstrap/js/alert.js',
@@ -38,10 +40,12 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc'
       },
       all: [
-        'Gruntfile.js',
         'assets/js/*.js',
         '!assets/js/scripts.js',
         '!assets/**/*.min.*'
+      ],
+      gruntfile: [
+        'Gruntfile.js'
       ]
     },
     less: {
@@ -57,7 +61,7 @@ module.exports = function(grunt) {
           // To enable, set sourceMap to true and update sourceMapRootpath based on your install
           sourceMap: true,
           sourceMapFilename: 'assets/css/main.css.map',
-          sourceMapRootpath: '/home/nblxtap/HTTPdocs/nielsendesign-wp/www/wp-content/themes/roots/'
+          sourceMapRootpath: rootPath
         }
       },
       build: {
@@ -107,14 +111,82 @@ module.exports = function(grunt) {
         src: 'assets/css/main.min.css'
       }
     },
+    delete_sync: {
+      dist: {
+        cwd: 'assets/img/bg/',
+        src: ['**/*.{png,jpg,gif,svg}'],
+        syncWith: 'assets/src/bg/'
+      }
+    },
+    clean: {
+      ftp: {
+        options: {
+          force: true
+        },
+        src: ['../roots_ftp/*', '!../roots_ftp/style.css']
+      },
+      icons: {
+        src: ['assets/css/icons.*.css', 'assets/css/*.{txt,html}', 'assets/img/icons/*']
+      }
+    },
+    copy: {
+      toftp: {
+        files: [
+          {
+            expand: true,
+            src: [
+              '*.{php,css,png}',
+              '!style.css',
+              'lang/*',
+              'lib/*',
+              'templates/*',
+              'assets/{fonts,img}/**/*',
+              'assets/{css,js}/{main,scripts}.min.{css,js}',
+              'assets/js/vendor/modernizr.min.js',
+              'assets/css/editor-style.css',
+              'assets/css/icons.*.css',
+              'assets/css/template-field.css'
+            ],
+            dest: '../roots_ftp/'
+          }
+        ]
+      }
+    },
     imagemin: {
       dynamic: {
         files: [{
           expand: true,
-          cwd: 'assets/img/',
+          cwd: 'assets/src/bg/',
           src: ['**/*.{png,jpg,gif,svg}'],
-          dest: 'assets/img/'
+          dest: 'assets/img/bg/'
         }]
+      }
+    },
+    grunticon: {
+      icons: {
+        files: [{
+          expand: true,
+          cwd: 'assets/src/svg/',
+          src: ['**/*.{svg,png}'],
+          dest: 'assets/css/'
+        }],
+        options: {
+          datasvgcss: 'icons.data.svg.css',
+          datapngcss: 'icons.data.png.css',
+          urlpngcss: 'icons.fallback.css',
+          previewhtml: 'preview.html',
+          loadersnippet: 'grunticon.loader.txt',
+          pngfolder: '../img/icons/',
+          cssprefix: '.icon-',
+          customselectors: {
+            //'*': ['.icon-$1:before']
+          },
+          defaultWidth: '20px',
+          defaultHeight: '20px',
+          colors: {
+            'dark' : '#444'
+          }
+        }
       }
     },
     modernizr: {
@@ -122,10 +194,7 @@ module.exports = function(grunt) {
         devFile: 'assets/vendor/modernizr/modernizr.js',
         outputFile: 'assets/js/vendor/modernizr.min.js',
         files: {
-          'src': [
-            ['assets/js/scripts.min.js'],
-            ['assets/css/main.min.css']
-          ]
+          src: ['assets/js/scripts.min.js', 'assets/css/main.min.css']
         },
         uglify: true,
         parseFiles: true
@@ -148,9 +217,12 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      gruntfile: {
+        files: 'Gruntfile.js',
+        tasks: ['jshint:gruntfile']
+      },
       less: {
         files: [
-          'assets/less/*.less',
           'assets/less/**/*.less'
         ],
         tasks: ['less:dev', 'autoprefixer:dev']
@@ -162,6 +234,18 @@ module.exports = function(grunt) {
         ],
         tasks: ['jshint', 'concat']
       },
+      images: {
+        files: [
+          'assets/src/bg/**/*.{png,jpg,gif,svg}'
+        ],
+        tasks: ['delete_sync', 'newer:imagemin:dynamic']
+      },
+      icons: {
+        files: [
+          'assets/src/svg/**/*.svg'
+        ],
+        tasks: ['clean:icons', 'grunticon:icons']
+      },
       livereload: {
         // Browser live reloading
         // https://github.com/gruntjs/grunt-contrib-watch#live-reloading
@@ -171,9 +255,7 @@ module.exports = function(grunt) {
         files: [
           'assets/css/main.css',
           'assets/js/scripts.js',
-          'templates/*.php',
-          'lib/*.php',
-          '*.php'
+          '**/*.php'
         ]
       }
     }
@@ -187,7 +269,11 @@ module.exports = function(grunt) {
     'jshint',
     'less:dev',
     'autoprefixer:dev',
-    'concat'
+    'concat',
+    'clean:icons',
+    'grunticon',
+    'delete_sync',
+    'newer:imagemin'
   ]);
   grunt.registerTask('build', [
     'jshint',
@@ -195,7 +281,12 @@ module.exports = function(grunt) {
     'autoprefixer:build',
     'uglify',
     'modernizr',
-    'imagemin',
-    'version'
+    'clean:icons',
+    'grunticon',
+    'delete_sync',
+    'newer:imagemin',
+    'version',
+    'clean:ftp',
+    'copy:toftp'
   ]);
 };

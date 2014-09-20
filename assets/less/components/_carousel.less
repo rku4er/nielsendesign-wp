@@ -20,13 +20,34 @@ body.single-product{
 }
 
 .modal-dialog{
+    .modal-body{
+        background-color: #fafafa;
+    }
+    .carousel-inner{
+        h2{
+            color: @brand-primary;
+        }
+    }
     .carousel-control{
         background: none;
+        position: static;
+        display: inline-block;
+        vertical-align: top;
+        .size(25px, 25px);
+
+        .close{
+            vertical-align: middle;
+            margin: 0;
+        }
 
         >span{
+            font-size: 20px;
+            position: static;
+            display: inline-block;
+            vertical-align: top;
             background-color: @brand-primary;
-            padding: 11px;
-            .size(50px, 50px);
+            margin: 0;
+            padding: 0;
         }
     }
 
