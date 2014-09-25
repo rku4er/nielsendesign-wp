@@ -113,9 +113,50 @@ body.home{
         background-position: 50% 50%;
         background-size: cover;
 
+        .text{
+            position: absolute;
+            color: #5C5A5A;
+            display: block;
+
+            >span{
+                display: block;
+            }
+
+            .title{
+                font-size: 22px;
+                font-weight: 500;
+                margin-bottom: 0.3em;
+
+                @media (min-width: @screen-sm-min){
+                    font-size: 28px;
+                }
+                @media (min-width: @screen-md-min){
+                    font-size: 34px;
+                }
+                @media (min-width: @screen-lg-min){
+                    font-size: 41px;
+                }
+            }
+            .caption{
+                font-size: 16px;
+                font-weight: 500;
+
+                @media (min-width: @screen-sm-min){
+                    font-size: 21px;
+                }
+                @media (min-width: @screen-md-min){
+                    font-size: 26px;
+                }
+                @media (min-width: @screen-lg-min){
+                    font-size: 32px;
+                }
+            }
+        }
+
         >a,
         >span{
             display: block;
+            height: 100%;
             position: relative;
 
             &:before{

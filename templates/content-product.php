@@ -2,7 +2,6 @@
   <article <?php post_class('container'); ?>>
     <header>
       <h1 class="page-header"><?php the_title(); ?></h1>
-      <br>
     </header>
     <div class="entry-content">
       <?php the_content(); ?>

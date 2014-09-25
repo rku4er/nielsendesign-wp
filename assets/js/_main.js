@@ -276,6 +276,22 @@ function resizeBanner(top){
       'height' : Math.round(sliderHeight) + 'px'
     });
   }
+
+  slider.find('.item:not(.active) .text').css({ 'opacity' : 0 });
+
+  slider
+    .on('slide.bs.carousel', function () {
+      $(this).find('.item:not(.active) .text')
+        .css({
+          'opacity' : 0
+        });
+    })
+    .on('slid.bs.carousel', function () {
+      $(this).find('.item.active .text')
+        .animate({
+          'opacity' : 1
+        }, 500, 'easeInExpo');
+    });
 }
 
 function panelShowCallback(target){

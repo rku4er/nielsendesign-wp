@@ -88,7 +88,7 @@ function home_slider_func($atts, $content = null) {
 
     if(have_rows('slider')){
 
-      $output .= '<section id="home-slider" class="carousel carousel-slide carousel-fade" data-ride="carousel" data-interval="'. $atts['timeout'] .'">';
+      $output .= '<section id="home-slider" class="carousel carousel-slide" data-ride="carousel" data-interval="'. $atts['timeout'] .'">';
 
       $output .= '<div class="carousel-inner">';
 
@@ -107,12 +107,46 @@ function home_slider_func($atts, $content = null) {
           $target = get_sub_field('new_window') ? 'target="_blank"' : '';
 
           if(get_sub_field('url')){
-            $output .= '<a href="'. get_sub_field('url') .'" '. $target .'>';
+            $output .= '<a href="'. get_sub_field('url') .'" '. $target .' class="container">';
           }else{
             $output .= '<span>';
           }
 
           $output .= '<img src="'. $img_src[0] .'" alt="">';
+
+          $position = '';
+
+          if(get_sub_field('text_offset_left')){
+            $position .= 'left:' . get_sub_field('text_offset_left') . ';';
+          }else{
+            $position .= 'left: 0;';
+          }
+
+          if(get_sub_field('text_offset_top')){
+            $position .= 'top:' . get_sub_field('text_offset_top') . ';';
+          }else{
+            $position .= 'top: 0;';
+          }
+
+          if(get_sub_field('text_color')){
+            $color = 'color:' . get_sub_field('text_color') . ';';
+          }
+
+          if(get_sub_field('text_width')){
+            $width = 'width:' . get_sub_field('text_width') . ';';
+          }
+
+          $output .= '<span class="text container" style="'. $position . $width . $color .'">';
+
+          if(get_sub_field('title')){
+            $output .= '<span class="title">'. get_sub_field('title') .'</span>';
+          }
+
+          if(get_sub_field('caption')){
+            $output .= '<span class="caption">'. get_sub_field('caption') .'</span>';
+          }
+
+          $output .= '</span>';
 
           if(get_sub_field('url')){
             $output .= '</a>';
@@ -339,7 +373,7 @@ function recognition_carousel_func($atts, $content = null) {
           $i++;
           $active = ($i == 1) ? 'active' : '';
 
-          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'full', false);
+          $img_src = wp_get_attachment_image_src(get_sub_field('image'), 'awards', false);
 
           if($i == 1 || ($i-1)%$atts['items_in_row'] == 0){
             $output .= '<div class="item '. $active .'">';

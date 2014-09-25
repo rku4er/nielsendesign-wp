@@ -22,6 +22,7 @@ function roots_setup() {
   add_image_size( 'inline-tile', 350, 240, true );
   add_image_size( 'showcase-tile', 480 );
   add_image_size( 'lightbox-products', 868, 488 );
+  add_image_size( 'awards', 100, 100, true );
 
   // Add post formats
   // http://codex.wordpress.org/Post_Formats
