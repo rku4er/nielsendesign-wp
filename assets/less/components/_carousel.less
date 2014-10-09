@@ -1,6 +1,9 @@
 body.single-product{
     .carousel{
-        padding: 0 170px;
+        @media (min-width: @screen-md-min) {
+            padding: 0 15%;
+        }
+
         .carousel-inner{
             > .item > img,
             > .item > a > img{
@@ -9,11 +12,30 @@ body.single-product{
         }
         .carousel-control{
             background: none;
+            opacity: 0.7;
+
+            &:hover,
+            &:focus{
+                opacity: 1;
+            }
+
+            &.left{
+                >span{
+                    margin-left: -25px;
+                }
+            }
+            &.right{
+                >span{
+                    margin-right: -25px;
+                }
+            }
 
             >span{
                 background-color: @gray;
                 padding: 11px;
                 border-radius: 3px;
+                line-height: 30px;
+                margin-top: -25px;
                 .size(50px, 50px);
             }
         }

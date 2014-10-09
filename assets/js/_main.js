@@ -63,7 +63,7 @@ function initCreationBottles(holder){
       setTimeout(function(){
         range.css('height' , '0').animate({
           'height' : range.data('perc')
-        }, 1000, 'easeInOutQuart');
+        }, 2000, 'easeInOutQuart');
       }, i*200);
 
       if(i === creationBottles.length){
