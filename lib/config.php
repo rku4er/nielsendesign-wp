@@ -11,7 +11,8 @@ add_theme_support('jquery-cdn');            // Enable to load jQuery from the Go
 /**
  * Configuration values
  */
-define('GOOGLE_ANALYTICS_ID', get_field('google_analytics_id', 'options')); // UA-XXXXX-Y (Note: Universal Analytics only, not Classic Analytics)
+$google_analytics_id = function_exists('get_field') ? get_field('google_analytics_id', 'options') : '';
+define('GOOGLE_ANALYTICS_ID', $google_analytics_id ); // UA-XXXXX-Y (Note: Universal Analytics only, not Classic Analytics)
 
 /**
  * .main classes
