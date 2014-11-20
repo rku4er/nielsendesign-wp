@@ -16,6 +16,47 @@
 
 (function($) {
 
+function getCookie(name) {
+  var matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+// options - объект с свойствами cookie (expires, path, domain, secure)
+function setCookie(name, value, options) {
+  options = options || {};
+
+  var expires = options.expires;
+
+  if (typeof expires === "number" && expires) {
+    var d = new Date();
+    d.setTime(d.getTime() + expires*1000);
+    expires = options.expires = d;
+  }
+  if (expires && expires.toUTCString) {
+    options.expires = expires.toUTCString();
+  }
+
+  value = encodeURIComponent(value);
+
+  var updatedCookie = name + "=" + value;
+
+  for(var propName in options) {
+    updatedCookie += "; " + propName;
+    var propValue = options[propName];
+    if (propValue !== true) {
+      updatedCookie += "=" + propValue;
+     }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+function deleteCookie(name) {
+  setCookie(name, "", { expires: -1 });
+}
+
 var debounce = function(func, wait, immediate) {
   var timeout;
   return function() {
@@ -54,6 +95,7 @@ function initCrewPersons(holder){
 
 function initCreationBottles(holder){
   var creationBottles = $(holder).find('.item');
+  var timeout = $(holder).data('timeout');
 
   if(creationBottles.length && !$('body').data('creation_bottles_loaded')){
     creationBottles.each(function(i){
@@ -63,7 +105,7 @@ function initCreationBottles(holder){
       setTimeout(function(){
         range.css('height' , '0').animate({
           'height' : range.data('perc')
-        }, 2000, 'easeInOutQuart');
+        }, timeout, 'easeInOutQuart');
       }, i*200);
 
       if(i === creationBottles.length){
@@ -287,10 +329,16 @@ function resizeBanner(top){
         });
     })
     .on('slid.bs.carousel', function () {
-      $(this).find('.item.active .text')
+      var activeSlide = $(this).find('.item.active');
+
+      activeSlide.find('.text')
         .animate({
           'opacity' : 1
         }, 500, 'easeInExpo');
+
+      /*if(activeSlide.siblings().length === activeSlide.index()){
+        slider.carousel('pause');
+      }*/
     });
 }
 
@@ -470,6 +518,29 @@ var Roots = {
 
       // lightbox for 'view all products' link
       initProductsModal('a[rel=gallery-2]');
+
+      //init showcase gallery coockie navigation
+      if($('#showcase-gallery').length){
+        var id = getCookie('galleryID'),
+            galleryCont = $('#showcase-gallery'),
+            tiles = galleryCont.find('a.caption'),
+            items = galleryCont.find('.item'),
+            options = {
+              'expires' : 0,
+              'path'    : '/'
+            };
+
+        if(id){
+          galleryCont.carousel(+id);
+        }
+
+        tiles.on('click', function(){
+          var activeItemID = items.filter('.active').index();
+
+          setCookie('galleryID', activeItemID, options);
+
+        });
+      }
 
     }
   },

@@ -77,6 +77,19 @@ function myfix_img_caption_shortcode_filter($dummy, $attr, $content) {
 }
 
 /**
+ * Search Filter
+ */
+function search_filter($query) {
+  if ( !is_admin() && $query->is_main_query() ) {
+    if ($query->is_search) {
+      $query->set('post_type', array('product'));
+    }
+  }
+}
+
+add_action('pre_get_posts','search_filter');
+
+/**
  * Home slider shortcode
  */
 function home_slider_func($atts, $content = null) {
@@ -307,13 +320,15 @@ add_shortcode('creation_tiles', 'creation_tiles_func');
  * Creation bottles shortcode
  */
 function creation_bottles_func($atts, $content = null) {
-    $atts = shortcode_atts(array(), $atts);
+    $atts = shortcode_atts(array(
+      'timeout' => '2000'
+    ), $atts);
 
     $output = '';
 
     if(have_rows('bottles')){
 
-      $output .= '<section id="creation-bottles">';
+      $output .= '<section id="creation-bottles" data-timeout="'. $atts['timeout'] .'">';
 
       $output .= '<div class="bottles-inner">';
 

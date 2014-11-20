@@ -12,7 +12,7 @@
     get_template_part('templates/header');
   ?>
 
-  <div class="wrap" role="document">
+  <div class="wrap <?php if(is_404()) echo 'container'; ?>" role="document">
 
     <div class="content row">
       <main class="main <?php echo roots_main_class(); ?>" role="main">

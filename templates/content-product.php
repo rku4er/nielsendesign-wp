@@ -1,8 +1,10 @@
 <?php while (have_posts()) : the_post(); ?>
   <article <?php post_class('container'); ?>>
+
     <header>
       <h1 class="page-header"><?php the_title(); ?></h1>
     </header>
+
     <div class="entry-content">
       <?php the_content(); ?>
       <br>
@@ -54,9 +56,14 @@
         echo $output;
     ?>
     </div>
+
     <footer>
-      <?php wp_link_pages(array('before' => '<nav class="page-nav"><p>' . __('Pages:', 'roots'), 'after' => '</p></nav>')); ?>
+      <br>
+      <br>
+      <div class="text-center"><a href="<?php echo get_bloginfo('url') ?>/showcase/" class="btn btn-primary" style="border-radius: 0; font-size: 20px">Return to showcase</a></div>
+      <br>
+      <br>
     </footer>
-    <?php comments_template('/templates/comments.php'); ?>
+
   </article>
 <?php endwhile; ?>

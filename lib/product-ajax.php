@@ -57,9 +57,9 @@ function getProducts(){
             $output .= '<h2 class="text-center">'. $post->post_title .'</h2> <br>';
 
             $post_thumbnail_id = get_post_thumbnail_id( $post->ID );
-            $imgSrc = wp_get_attachment_image_src( $post_thumbnail_id, 'full', false );
+            $imgSrc = wp_get_attachment_image_src( $post_thumbnail_id, 'lightbox-products', false );
 
-            $output .= '<img src="'. $imgSrc[0] .'" alt="">';
+            $output .= '<a href="'. get_the_permalink($post->ID) .'"><img src="'. $imgSrc[0] .'" alt=""></a>';
 
             $output .= '</div>';
 

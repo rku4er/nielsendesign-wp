@@ -45,6 +45,9 @@
 </nav>
 <?php endif; ?>
 
+
+<?php if(!is_single($post)): ?>
+
 <header id="mainnav" class="navbar-menu navbar navbar-default navbar-fixed-bottom" role="banner">
   <div class="container">
 
@@ -67,3 +70,5 @@
 
   </div>
 </header>
+
+<?php endif; ?>
