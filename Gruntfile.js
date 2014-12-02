@@ -145,7 +145,8 @@ module.exports = function(grunt) {
               'assets/js/vendor/modernizr.min.js',
               'assets/css/editor-style.css',
               'assets/css/icons.*.css',
-              'assets/css/template-field.css'
+              'assets/css/template-field.css',
+              'assets/manifest.json'
             ],
             dest: '../roots_ftp/'
           }

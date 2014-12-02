@@ -1,7 +1,10 @@
 // Captions
 .wp-caption {
   &:extend(.thumbnail all);
-  max-width: 45% !important;
+
+  //@media (min-width: @screen-md-min){
+    max-width: 45% !important;
+  //}
 
   @media (max-width: @screen-sm-max){
     margin-left: 15px;
@@ -33,5 +36,9 @@
 }
 
 img.size-full{
-  max-width: 45%;
+  max-width: 100%;
+
+  @media (min-width: @screen-sm-min){
+    max-width: 45% !important;
+  }
 }

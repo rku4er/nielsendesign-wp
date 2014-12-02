@@ -34,10 +34,21 @@
             font-weight: normal;
             color: @brand-primary;
             text-overflow: ellipsis;
-            font-size: 18px;
+            font-size: 16px;
+            text-shadow: 10px 7px 8px rgba(0, 0, 0, 0.4);
+            width: 300%;
+            margin-left: -110%;
 
             @media (min-width: @screen-md-min){
+                margin-left: -104%;
                 font-size: 14px;
+            }
+        }
+
+        &:nth-child(2),
+        &:nth-child(4){
+            .title{
+                margin-bottom: -1.5em;
             }
         }
 
